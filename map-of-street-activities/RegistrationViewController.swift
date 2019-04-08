@@ -10,21 +10,37 @@ import UIKit
 
 class RegistrationViewController: UIViewController {
 
+    @IBOutlet weak var inputDateOfBirthField: UITextField!
+    
+    private var datePicker: UIDatePicker?
+    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        datePicker = UIDatePicker()
+        datePicker?.datePickerMode = .date
+        datePicker?.addTarget(self, action: #selector(RegistrationViewController.dateChanged(datePicker:)), for: .valueChanged)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegistrationViewController.viewTapped(gestureRecognizer:)))
+        
+        view.addGestureRecognizer(tapGesture)
+        
+        inputDateOfBirthField.inputView = datePicker
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer) {
+        
+        view.endEditing(true)
     }
-    */
-
+    
+    @objc func dateChanged(datePicker: UIDatePicker) {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        inputDateOfBirthField.text = dateFormatter.string(from: datePicker.date)
+        
+        view.endEditing(true)
+    }
 }

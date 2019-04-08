@@ -180,7 +180,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RPP-RR-CGe">
+                            <textField opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder=" Pick a date" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RPP-RR-CGe">
                                 <rect key="frame" x="33" y="219" width="309" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -307,6 +307,9 @@
                         <viewLayoutGuide key="safeArea" id="jmY-d6-ve9"/>
                     </view>
                     <navigationItem key="navigationItem" id="bfV-fJ-GJ3"/>
+                    <connections>
+                        <outlet property="inputDateOfBirthField" destination="RPP-RR-CGe" id="MNe-Gd-fhL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0I9-Cx-mSk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
