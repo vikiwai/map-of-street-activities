@@ -8,11 +8,34 @@
 
 import UIKit
 
-class RegistrationViewController: UIViewController {
+class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    let myPickerData: Array<String> = ["Male", "Female"]
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return myPickerData.count
+    }
+    
+    func pickerView( _ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return myPickerData[row]
+    }
+    
+    func pickerView( _ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        inputGenderField.text = myPickerData[row]
+    }
+    
 
     @IBOutlet weak var inputDateOfBirthField: UITextField!
     
+    @IBOutlet weak var inputGenderField: UITextField!
+    
     private var datePicker: UIDatePicker?
+    
+    private var genderPicker = UIPickerView()
     
     override func viewDidLoad() {
         
@@ -27,6 +50,10 @@ class RegistrationViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
         
         inputDateOfBirthField.inputView = datePicker
+        
+        inputGenderField.inputView = genderPicker
+        
+        genderPicker.delegate = self
     }
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer) {
