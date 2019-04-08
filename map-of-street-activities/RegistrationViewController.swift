@@ -10,6 +10,11 @@ import UIKit
 
 class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    @IBOutlet weak var inputFirstNameField: UITextField!
+    
+    @IBOutlet weak var inputLastNameField: UITextField!
+    
+    
     let myPickerData: Array<String> = ["Male", "Female"]
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -27,7 +32,6 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     func pickerView( _ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         inputGenderField.text = myPickerData[row]
     }
-    
 
     @IBOutlet weak var inputDateOfBirthField: UITextField!
     
@@ -36,6 +40,12 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     private var datePicker: UIDatePicker?
     
     private var genderPicker = UIPickerView()
+    
+    @IBOutlet weak var inputEmailField: UITextField!
+    
+    @IBOutlet weak var inputPasswordField: UITextField!
+    
+    @IBOutlet weak var inputConfrirmPasswordField: UITextField!
     
     override func viewDidLoad() {
         

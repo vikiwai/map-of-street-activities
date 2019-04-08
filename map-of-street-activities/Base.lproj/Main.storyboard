@@ -308,8 +308,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="bfV-fJ-GJ3"/>
                     <connections>
+                        <outlet property="inputConfrirmPasswordField" destination="Obo-xY-Fv8" id="ADL-1C-bj0"/>
                         <outlet property="inputDateOfBirthField" destination="RPP-RR-CGe" id="MNe-Gd-fhL"/>
+                        <outlet property="inputEmailField" destination="jif-G6-Co7" id="1nO-BZ-8KE"/>
+                        <outlet property="inputFirstNameField" destination="ItD-7Y-J0C" id="6KX-OX-0Yi"/>
                         <outlet property="inputGenderField" destination="RLa-uG-eGy" id="5jW-XD-WNN"/>
+                        <outlet property="inputLastNameField" destination="3dP-Mf-A4n" id="U4L-OD-PcB"/>
+                        <outlet property="inputPasswordField" destination="fgu-RU-RNL" id="3h2-Ed-Efz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0I9-Cx-mSk" userLabel="First Responder" sceneMemberID="firstResponder"/>
