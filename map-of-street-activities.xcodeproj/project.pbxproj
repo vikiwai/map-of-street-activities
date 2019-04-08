@@ -15,6 +15,7 @@
 		5BEF5319225A8FD300C79D21 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5BEF5317225A8FD300C79D21 /* LaunchScreen.storyboard */; };
 		5BEF5324225A8FD300C79D21 /* map_of_street_activitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF5323225A8FD300C79D21 /* map_of_street_activitiesTests.swift */; };
 		5BEF532F225A8FD300C79D21 /* map_of_street_activitiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF532E225A8FD300C79D21 /* map_of_street_activitiesUITests.swift */; };
+		5BEF533D225AC9BA00C79D21 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF533C225AC9BA00C79D21 /* RegistrationViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		5BEF532A225A8FD300C79D21 /* map-of-street-activitiesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "map-of-street-activitiesUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BEF532E225A8FD300C79D21 /* map_of_street_activitiesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = map_of_street_activitiesUITests.swift; sourceTree = "<group>"; };
 		5BEF5330225A8FD300C79D21 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5BEF533C225AC9BA00C79D21 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				5BEF5317225A8FD300C79D21 /* LaunchScreen.storyboard */,
 				5BEF531A225A8FD300C79D21 /* Info.plist */,
 				5BEF5312225A8FD000C79D21 /* map_of_street_activities.xcdatamodeld */,
+				5BEF533C225AC9BA00C79D21 /* RegistrationViewController.swift */,
 			);
 			path = "map-of-street-activities";
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 			files = (
 				5BEF530E225A8FD000C79D21 /* ViewController.swift in Sources */,
 				5BEF530C225A8FD000C79D21 /* AppDelegate.swift in Sources */,
+				5BEF533D225AC9BA00C79D21 /* RegistrationViewController.swift in Sources */,
 				5BEF5314225A8FD000C79D21 /* map_of_street_activities.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
