@@ -333,29 +333,29 @@
             </objects>
             <point key="canvasLocation" x="829.60000000000002" y="25.637181409295355"/>
         </scene>
-        <!--View Controller-->
+        <!--Creator View Controller-->
         <scene sceneID="WVt-8L-gdt">
             <objects>
-                <viewController id="qqL-Ct-gqv" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="creatorController" id="qqL-Ct-gqv" customClass="CreatorViewController" customModule="map_of_street_activities" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1WH-xP-nKq">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.86272910290000004" green="0.93914141900000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="8lx-YB-9pI"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UIb-JK-oLo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-503" y="1830"/>
+            <point key="canvasLocation" x="-521" y="1830"/>
         </scene>
-        <!--View Controller-->
+        <!--Account View Controller-->
         <scene sceneID="hHL-GY-x5L">
             <objects>
-                <viewController id="dII-Ea-8Gx" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="accountController" id="dII-Ea-8Gx" customClass="AccountViewController" customModule="map_of_street_activities" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fDP-XY-DY3">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.86272910290000004" green="0.93914141900000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="uXf-4J-FhN"/>
                     </view>
                 </viewController>
@@ -363,14 +363,14 @@
             </objects>
             <point key="canvasLocation" x="450" y="1830"/>
         </scene>
-        <!--View Controller-->
+        <!--Settings View Controller-->
         <scene sceneID="rKx-yv-dgn">
             <objects>
-                <viewController id="lUN-lc-5GU" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="settingsController" id="lUN-lc-5GU" customClass="SettingsViewController" customModule="map_of_street_activities" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LJl-ac-Q61">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.86272910290000004" green="0.93914141900000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="gKO-wT-7vb"/>
                     </view>
                 </viewController>

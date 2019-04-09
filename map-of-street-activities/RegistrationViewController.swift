@@ -15,7 +15,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var inputLastNameField: UITextField!
     
     
-    let myPickerData: Array<String> = ["Male", "Female"]
+    let myPickerData: Array<String> = ["Male", "Female", "Rather not tell"]
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
