@@ -249,7 +249,6 @@
                                 <state key="normal" title="Create an account"/>
                                 <connections>
                                     <action selector="buttonCreateAccount:" destination="ble-Xa-NkK" eventType="touchUpInside" id="ASE-NC-roB"/>
-                                    <segue destination="inm-zJ-WhR" kind="show" id="P4X-YX-o0z"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -673,7 +672,4 @@
         <image name="search" width="30" height="30"/>
         <image name="sketch" width="30" height="30"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="P4X-YX-o0z"/>
-    </inferredMetricsTieBreakers>
 </document>

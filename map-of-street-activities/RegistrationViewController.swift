@@ -48,9 +48,70 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var inputConfrirmPasswordField: UITextField!
     
     @IBAction func buttonCreateAccount(_ sender: Any) {
-        print(inputEmailField.text)
+        var request = URLRequest(url: URL(string: "http://localhost/users")!)
+        
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        let params: [String: String] = [
+            "firstName": inputFirstNameField.text!,
+            "lastName": inputLastNameField.text!,
+            "birthDate": inputDateOfBirthField.text!,
+            "gender": inputGenderField.text!,
+            "email": inputEmailField.text!,
+            "password": inputPasswordField.text!
+        ]
+        
+        let encoder = JSONEncoder()
+        
+        do {
+            request.httpBody = try encoder.encode(params)
+            
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            let task = session.dataTask(with: request) { (responseData, response, responseError) in
+                guard responseError == nil else {
+                    print(responseError as Any)
+                    return
+                }
+                
+                // APIs usually respond with the data you just sent in your POST request
+                if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
+                    print("response: ", utf8Representation)
+                    
+                    if utf8Representation == "{\"status\": \"OK\"}" {
+                        DispatchQueue.main.async{
+                            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                            let newViewController = storyBoard.instantiateViewController(withIdentifier: "mapController") as! MapViewController
+                            self.present(newViewController, animated: true, completion: nil)
+                        }
+                    }
+                    else {
+                        DispatchQueue.main.async{
+                            let alertController = UIAlertController(title: "Ooops", message: "This e-mail is already in use", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Fix e-mail adress", style: UIAlertAction.Style.default) {
+                                UIAlertAction in
+                                NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    }
+                    
+                } else {
+                    print("no readable data received in response")
+                }
+            }
+            
+            task.resume()
+        } catch {
+            print("Что-то всё же пошло не так... Но что? I have no idea!")
+        }
+        
+       
+        
     }
-    
+
     
     override func viewDidLoad() {
         
