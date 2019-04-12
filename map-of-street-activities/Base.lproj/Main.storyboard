@@ -92,6 +92,7 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Sign in"/>
                                 <connections>
+                                    <action selector="requestEntry:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FaO-IL-YpA"/>
                                     <segue destination="inm-zJ-WhR" kind="show" id="d3L-2t-vq0"/>
                                 </connections>
                             </button>
@@ -132,6 +133,8 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="inputEmailField" destination="eQU-hm-Kw6" id="he2-vN-mlD"/>
+                        <outlet property="inputPasswordField" destination="D0v-6h-a61" id="xTE-vQ-4sg"/>
                         <outlet property="labelOfRequestRegistrationButton" destination="8MC-pG-jhx" id="PRy-5o-YPK"/>
                     </connections>
                 </viewController>
