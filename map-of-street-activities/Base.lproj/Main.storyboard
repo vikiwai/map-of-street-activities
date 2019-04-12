@@ -248,6 +248,7 @@
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="Create an account"/>
                                 <connections>
+                                    <action selector="buttonCreateAccount:" destination="ble-Xa-NkK" eventType="touchUpInside" id="ASE-NC-roB"/>
                                     <segue destination="inm-zJ-WhR" kind="show" id="P4X-YX-o0z"/>
                                 </connections>
                             </button>

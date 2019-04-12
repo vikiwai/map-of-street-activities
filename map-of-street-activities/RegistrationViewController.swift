@@ -47,6 +47,11 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     
     @IBOutlet weak var inputConfrirmPasswordField: UITextField!
     
+    @IBAction func buttonCreateAccount(_ sender: Any) {
+        print(inputEmailField.text)
+    }
+    
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
