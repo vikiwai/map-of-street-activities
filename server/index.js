@@ -5,6 +5,7 @@ const MongoClient = require('mongodb').MongoClient
 
 const app = express();
 app.use(express.urlencoded());
+app.use(express.json());
 
 let db;
 
@@ -42,8 +43,9 @@ app.get('/', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
+  console.log("/users:", req.body);
+
   db.collection('users').find({ email: req.body.email }).count().then(result => {
-    console.log(result);
     if(result) {
       res.send(`{"status": "ALREADY_EXISTS"}`);
     }
