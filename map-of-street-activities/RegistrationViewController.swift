@@ -89,7 +89,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
                     else {
                         DispatchQueue.main.async{
                             let alertController = UIAlertController(title: "Ooops", message: "This e-mail is already in use", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "Fix e-mail adress", style: UIAlertAction.Style.default) {
+                            let okAction = UIAlertAction(title: "Correct e-mail adress", style: UIAlertAction.Style.default) {
                                 UIAlertAction in
                                 NSLog("OK")
                             }

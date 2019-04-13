@@ -59,6 +59,8 @@ app.post('/users', (req, res) => {
 });
 
 app.post('/auth', (req, res) => {
+  console.log("/auth:", req.body);
+
   db.collection('users').findOne({ email: req.body.email, password: req.body.password }).then(result => {
     if(result) {
       res.send(`{"result": "OK", "token": "deafbeef"}`);

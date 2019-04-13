@@ -93,7 +93,6 @@
                                 <state key="normal" title="Sign in"/>
                                 <connections>
                                     <action selector="requestEntry:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FaO-IL-YpA"/>
-                                    <segue destination="inm-zJ-WhR" kind="show" id="d3L-2t-vq0"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -134,7 +133,7 @@
                     </view>
                     <connections>
                         <outlet property="inputEmailField" destination="eQU-hm-Kw6" id="he2-vN-mlD"/>
-                        <outlet property="inputPasswordField" destination="D0v-6h-a61" id="xTE-vQ-4sg"/>
+                        <outlet property="inputPasswordField" destination="D0v-6h-a61" id="R0k-8C-2DX"/>
                         <outlet property="labelOfRequestRegistrationButton" destination="8MC-pG-jhx" id="PRy-5o-YPK"/>
                     </connections>
                 </viewController>
@@ -339,7 +338,7 @@
         <!--Creator-->
         <scene sceneID="TtJ-Gl-KDe">
             <objects>
-                <viewController id="RRV-Fj-3w4" customClass="CreatorViewController" customModule="map_of_street_activities" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="creatorController" id="RRV-Fj-3w4" customClass="CreatorViewController" customModule="map_of_street_activities" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qmC-3Y-a1u">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -435,7 +434,7 @@
         <!--Account-->
         <scene sceneID="ncl-iR-dif">
             <objects>
-                <viewController id="64c-zm-uIH" customClass="AccountViewController" customModule="map_of_street_activities" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="accountController" id="64c-zm-uIH" customClass="AccountViewController" customModule="map_of_street_activities" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ws8-Km-2vf">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -497,7 +496,7 @@
         <!--Settings-->
         <scene sceneID="lHa-ib-som">
             <objects>
-                <viewController id="feX-yi-HzC" customClass="SettingsViewController" customModule="map_of_street_activities" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="settingsController" id="feX-yi-HzC" customClass="SettingsViewController" customModule="map_of_street_activities" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="57k-e9-MTE">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
