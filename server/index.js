@@ -99,11 +99,11 @@ app.post('/auth', (req, res) => {
         { email: req.body.email },
         { $set: { token: authToken }}
       ).then(() => {
-        res.send({ result: "OK", token: authToken });
+        res.send({ status: "OK", token: authToken });
       });
     }
     else {
-      res.send({ result: "INVALID_CREDENTIALS" });
+      res.send({ status: "INVALID_CREDENTIALS" });
     }
   })
 });
