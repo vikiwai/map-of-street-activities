@@ -1,6 +1,8 @@
 
 const express = require('express');
 
+const uuidv4 = require('uuid/v4');
+
 const MongoClient = require('mongodb').MongoClient
 
 const app = express();
@@ -50,11 +52,14 @@ app.post('/users', (req, res) => {
       res.send(`{"status": "ALREADY_EXISTS"}`);
     }
     else {
-      db.collection('users').insertOne(req.body);
+      const authToken = uuidv4();
 
-      res.send(`{"status": "OK"}`);
-      // res.send(`<pre>${JSON.stringify(req.body, null, 4)}</pre>`);
+      db.collection('users').insertOne(Object.assign({}, req.body, { token: authToken }));
+
+      res.send({ status: "OK", token: authToken });
     }
+  }).catch(err => {
+    console.log(err);
   });
 });
 
@@ -63,12 +68,29 @@ app.post('/auth', (req, res) => {
 
   db.collection('users').findOne({ email: req.body.email, password: req.body.password }).then(result => {
     if(result) {
-      res.send(`{"result": "OK", "token": "deafbeef"}`);
+      const authToken = uuidv4();
+
+      db.collection('users').updateOne(
+        { email: req.body.email },
+        { $set: { token: authToken }}
+      ).then(() => {
+        res.send({ result: "OK", token: authToken });
+      });
     }
     else {
-      res.send(`{"result": "INVALID_CREDENTIALS"}`);
+      res.send({ result: "INVALID_CREDENTIALS" });
     }
   })
+});
+
+app.get('/activities', (req, res) => {
+  res.send({ something: "orOther" });
+});
+
+app.post('/activities', (req, res) => {
+  console.log("/activities:", req.body);
+
+
 });
 
 MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
