@@ -13,47 +13,8 @@ import CoreLocation
 class MapViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
-    
-    /**
-    let regionRadius: CLLocationDistance = 1000
-    
-    func centerMapOnLocation(location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
-                                                  latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
-        mapView.setRegion(coordinateRegion, animated: true)
-     }
-     */
- 
 
     var activities: [Activity] = []
-    
-    func loadInitialData() {
-        // Read the .json file into a Data object.
-        guard let fileName = Bundle.main.path(forResource: "Activity", ofType: "json")
-            else { return }
-        let optionalData = try? Data(contentsOf: URL(fileURLWithPath: fileName))
-        
-        guard
-            let data = optionalData,
-            // Obtain a JSON object
-            let json = try? JSONSerialization.jsonObject(with: data),
-            // Check that the JSON object is a dictionary with String keys and Any values.
-            let dictionary = json as? [String: Any],
-            // You’re only interested in the JSON object whose key is "data".
-            let works = dictionary["data"] as? [[Any]]
-        else {
-                return
-        }
-        
-        /*
-        let validWorks = works.flatMap {
-            Activity(json: $0)
-        }
-        */
-        
-        // activities.append(contentsOf: validWorks)
-    }
-    
     
     // The location manager will update the delegate function.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -90,7 +51,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         
         mapView.addAnnotation(activity)
         
-        loadInitialData()
+        // loadInitialData()
         mapView.addAnnotations(activities)
     }
 }
@@ -126,3 +87,42 @@ extension MapViewController: MKMapViewDelegate {
         return view
     }
 }
+
+/**
+ let regionRadius: CLLocationDistance = 1000
+ 
+ func centerMapOnLocation(location: CLLocation) {
+ let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
+ latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
+ mapView.setRegion(coordinateRegion, animated: true)
+ }
+ */
+
+/**
+ func loadInitialData() {
+ // Read the .json file into a Data object.
+ guard let fileName = Bundle.main.path(forResource: "Activity", ofType: "json")
+ else { return }
+ let optionalData = try? Data(contentsOf: URL(fileURLWithPath: fileName))
+ 
+ guard
+ let data = optionalData,
+ // Obtain a JSON object
+ let json = try? JSONSerialization.jsonObject(with: data),
+ // Check that the JSON object is a dictionary with String keys and Any values.
+ let dictionary = json as? [String: Any],
+ // You’re only interested in the JSON object whose key is "data".
+ let works = dictionary["data"] as? [[Any]]
+ else {
+ return
+ }
+ 
+ /*
+ let validWorks = works.flatMap {
+ Activity(json: $0)
+ }
+ */
+ 
+ // activities.append(contentsOf: validWorks)
+ }
+ */

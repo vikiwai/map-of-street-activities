@@ -50,8 +50,11 @@ class ViewController: UIViewController {
                 if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
                     print("response: ", utf8Representation)
                     
-                    if utf8Representation == "{\"result\": \"OK\", \"token\": \"deafbeef\"}" {
-                        DispatchQueue.main.async{
+                    let dict = utf8Representation.toJSON() as? [String: String]
+                    if dict!["status"]! == "OK" {
+                        let authToken = dict!["token"]!
+                        
+                        DispatchQueue.main.async {
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             let newViewController = storyBoard.instantiateViewController(withIdentifier: "mapController") as! MapViewController
                             self.present(newViewController, animated: true, completion: nil)
@@ -93,3 +96,10 @@ class ViewController: UIViewController {
     }
 }
 
+
+extension String {
+    func toJSON() -> Any? {
+        guard let data = self.data(using: .utf8, allowLossyConversion: true) else { return nil }
+        return try? JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+    }
+}

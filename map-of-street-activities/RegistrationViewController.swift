@@ -78,8 +78,10 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
                 // APIs usually respond with the data you just sent in your POST request
                 if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
                     print("response: ", utf8Representation)
-                    
-                    if utf8Representation == "{\"status\": \"OK\"}" {
+                    let dict = utf8Representation.toJSON() as? [String: String]
+                    if dict!["status"]! == "OK" {
+                        let authToken = dict!["token"]!
+
                         DispatchQueue.main.async{
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             let newViewController = storyBoard.instantiateViewController(withIdentifier: "mapController") as! MapViewController
@@ -145,5 +147,12 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
         inputDateOfBirthField.text = dateFormatter.string(from: datePicker.date)
         
         view.endEditing(true)
+    }
+}
+
+extension String {
+    func toJSON() -> Any? {
+        guard let data = self.data(using: .utf8, allowLossyConversion: true) else { return nil }
+        return try? JSONSerialization.jsonObject(with: data, options: .mutableContainers)
     }
 }
