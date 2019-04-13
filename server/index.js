@@ -41,7 +41,32 @@ app.get('/', (req, res) => {
         <input type="password" name="password" placeholder="Пароль" />
       <p>
         <button type="submit">Отправить!</button>
-    </form>`);
+    </form>
+    <hr />
+    <form action="/activities" method="POST">
+      <p>
+        <input name="title" placeholder="Honey festival" />
+      <p>
+        <input name="locationName" placeholder="ул. Маковского, 2" />
+      <p>
+        <input name="coordsLat" placeholder="13.37" />
+        <input name="coordsLon" placeholder="14.77" />
+      <p>
+        <input name="company" placeholder="ООО «Розетка-кофе»" />
+      <p>
+        <textarea name="description"></textarea>
+      <p>
+        <input name="date" placeholder="2018-01-18" />
+      <p>
+        <input name="timeStart" placeholder="10:00" />
+      <p>
+        <input name="durationHours" placeholder="4.5" />
+      <p>
+        <input name="authToken" placeholder="deadbeef1998" />
+      <p>
+        <button type="submit">Отправить!</button>
+    </form>
+    `);
 });
 
 app.post('/users', (req, res) => {
@@ -90,7 +115,28 @@ app.get('/activities', (req, res) => {
 app.post('/activities', (req, res) => {
   console.log("/activities:", req.body);
 
-
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(user) {
+      db.collection('activities').insertOne({
+          title: req.body.title,
+          locationName: req.body.locationName,
+          coordinates: [parseFloat(req.body.coordsLat), parseFloat(req.body.coordsLon)],
+          company: req.body.company,
+          description: req.body.description,
+          date: req.body.date,
+          timeStart: req.body.timeStart,
+          durationHours: req.body.durationHours,
+          creatorEmail: user.email
+      }).then(result => {
+        res.send({ result: "OK" });
+      });
+    }
+    else {
+      res.send({ result: "INVALID_AUTH" });
+    }
+  }).catch(err => {
+    console.log(err);
+  })
 });
 
 MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
