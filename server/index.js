@@ -88,8 +88,8 @@ app.post('/users', (req, res) => {
   });
 });
 
-app.post('POST /auth', (req, res) => {
-  console.log("/auth:", req.body);
+app.post('/auth', (req, res) => {
+  console.log("POST /auth:", req.body);
 
   db.collection('users').findOne({ email: req.body.email, password: req.body.password }).then(result => {
     if(result) {
