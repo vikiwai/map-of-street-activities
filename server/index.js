@@ -70,7 +70,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/users', (req, res) => {
-  console.log("/users:", req.body);
+  console.log("POST /users:", req.body);
 
   db.collection('users').find({ email: req.body.email }).count().then(result => {
     if(result) {
@@ -88,7 +88,7 @@ app.post('/users', (req, res) => {
   });
 });
 
-app.post('/auth', (req, res) => {
+app.post('POST /auth', (req, res) => {
   console.log("/auth:", req.body);
 
   db.collection('users').findOne({ email: req.body.email, password: req.body.password }).then(result => {
@@ -109,11 +109,21 @@ app.post('/auth', (req, res) => {
 });
 
 app.get('/activities', (req, res) => {
-  res.send({ something: "orOther" });
+  console.log("GET /activities");
+
+  db.collection('activities').find().toArray((err, activities) => {
+    if(err) {
+      console.log(err);
+      res.send([]);
+    }
+    else {
+      res.send(activities.map(activity => Object.assign(activity, { _id: undefined })));
+    }
+  });
 });
 
 app.post('/activities', (req, res) => {
-  console.log("/activities:", req.body);
+  console.log("POST /activities:", req.body);
 
   db.collection('users').findOne({ token: req.body.authToken }).then(user => {
     if(user) {
