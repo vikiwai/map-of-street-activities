@@ -24,7 +24,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     // Create a CLLocationManager
-    let locationManager = CLLocationManager()
+    var locationManager = CLLocationManager()
     
     func loadInitialData() {
         let request = URLRequest(url: URL(string: "http://localhost/activities")!)
@@ -75,6 +75,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
+        } else {
+            print("Turn on location services or GPS")
         }
 
         loadInitialData()

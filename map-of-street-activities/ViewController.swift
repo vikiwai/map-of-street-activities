@@ -57,7 +57,6 @@ class ViewController: UIViewController {
                     if dict!["status"]! == "OK" {
                         DispatchQueue.main.async {
                             self.save(token: dict!["token"]!)
-                            // print(self.authToken!)
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
                             self.present(newViewController, animated: true, completion: nil)
