@@ -15,7 +15,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var inputLastNameField: UITextField!
     
     
-    let myPickerData: Array<String> = ["Male", "Female", "Rather not tell"]
+    let myPickerData: Array<String> = ["Rather not tell", "Female", "Male"]
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -31,6 +31,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     
     func pickerView( _ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         inputGenderField.text = myPickerData[row]
+        self.view.endEditing(true)
     }
 
     @IBOutlet weak var inputDateOfBirthField: UITextField!
@@ -132,6 +133,8 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
         inputGenderField.inputView = genderPicker
         
         genderPicker.delegate = self
+        
+        view.addGestureRecognizer(tapGesture)
     }
     
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer) {
