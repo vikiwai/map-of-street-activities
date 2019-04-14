@@ -114,9 +114,6 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
         } catch {
             print("Что-то всё же пошло не так... Но что? I have no idea!")
         }
-        
-       
-        
     }
 
     

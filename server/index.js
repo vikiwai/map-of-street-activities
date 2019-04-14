@@ -139,11 +139,11 @@ app.post('/activities', (req, res) => {
           durationHours: parseFloat(req.body.durationHours),
           creatorEmail: user.email
       }).then(result => {
-        res.send({ result: "OK" });
+        res.send({ status: "OK" });
       });
     }
     else {
-      res.send({ result: "INVALID_AUTH" });
+      res.send({ status: "INVALID_AUTH" });
     }
   }).catch(err => {
     console.log(err);

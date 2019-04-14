@@ -12,8 +12,6 @@ import CoreLocation
 import CoreData
 
 class MapViewController: UIViewController, CLLocationManagerDelegate {
-
-    var authToken: String?
     
     @IBOutlet weak var mapView: MKMapView!
 
@@ -61,33 +59,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         task.resume()
     }
     
-    func fetchAuthToken() {
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-                return
-        }
-        
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
-        
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
-        
-        do {
-            let result = try managedContext.fetch(fetchRequest)
-            for data in result as! [NSManagedObject] {
-                authToken = data.value(forKey: "token") as! String
-            }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-        }
-    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        fetchAuthToken()
-        
-        print("Auth token is ", authToken!)
+    
         mapView.delegate = self
         
         // Decide whether application will need the users location always or only when the apps in use
