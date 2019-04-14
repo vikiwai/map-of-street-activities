@@ -544,6 +544,17 @@
                         <viewLayoutGuide key="safeArea" id="Oz3-iZ-om5"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Creator" image="sketch" id="oiO-U5-iNj"/>
+                    <connections>
+                        <outlet property="inputAddressField" destination="rDw-yK-78I" id="cVX-y8-c49"/>
+                        <outlet property="inputCompanyField" destination="et4-1L-xTl" id="bHa-uh-9Vl"/>
+                        <outlet property="inputDateField" destination="Mzt-bx-Dhh" id="bND-27-lKx"/>
+                        <outlet property="inputDescriptionField" destination="0bj-WD-Sds" id="wwZ-n3-sBZ"/>
+                        <outlet property="inputDurationField" destination="LnV-BY-9PV" id="RLR-RX-VJ6"/>
+                        <outlet property="inputLatitudeField" destination="ain-1S-NUY" id="84O-Xy-tIK"/>
+                        <outlet property="inputLongitudeField" destination="dte-4d-WmH" id="fTI-Zg-tZe"/>
+                        <outlet property="inputStartTimeField" destination="nyS-Af-I2P" id="1bb-1A-Ysq"/>
+                        <outlet property="inputTitleField" destination="34e-Ha-OkV" id="uvX-zj-ALT"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Q2l-CG-OmX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -677,9 +688,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fNM-Ji-zI4">
                                 <rect key="frame" x="239" y="463" width="65" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Log out">
-                                    <color key="titleColor" red="0.84878528270152276" green="0.12181138125780129" blue="0.1942360768224782" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
+                                <state key="normal" title="Log out"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.86272910290000004" green="0.93914141900000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

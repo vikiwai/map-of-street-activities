@@ -10,6 +10,16 @@ import UIKit
 
 class CreatorViewController: UIViewController {
 
+    @IBOutlet weak var inputTitleField: UITextField!
+    @IBOutlet weak var inputAddressField: UITextField!
+    @IBOutlet weak var inputLatitudeField: UITextField!
+    @IBOutlet weak var inputLongitudeField: UITextField!
+    @IBOutlet weak var inputDateField: UITextField!
+    @IBOutlet weak var inputCompanyField: UITextField!
+    @IBOutlet weak var inputStartTimeField: UITextField!
+    @IBOutlet weak var inputDurationField: UITextField!
+    @IBOutlet weak var inputDescriptionField: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
