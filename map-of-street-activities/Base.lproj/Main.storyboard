@@ -460,6 +460,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jyz-Jg-Cdq">
                                 <rect key="frame" x="106" y="477" width="108" height="30"/>
                                 <state key="normal" title="Create an event"/>
+                                <connections>
+                                    <action selector="createEventButton:" destination="RRV-Fj-3w4" eventType="touchUpInside" id="1Sr-L1-Bed"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create your own event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aaC-Rz-BSi">
                                 <rect key="frame" x="16" y="20" width="288" height="33"/>

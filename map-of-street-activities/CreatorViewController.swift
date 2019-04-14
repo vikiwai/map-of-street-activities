@@ -20,6 +20,9 @@ class CreatorViewController: UIViewController {
     @IBOutlet weak var inputDurationField: UITextField!
     @IBOutlet weak var inputDescriptionField: UITextView!
     
+    @IBAction func createEventButton(_ sender: Any) {
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
