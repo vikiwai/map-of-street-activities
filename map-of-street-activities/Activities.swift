@@ -9,36 +9,39 @@
 import Foundation
 import MapKit
 
-class Activity: NSObject, MKAnnotation {
-    let title: String?
+class Activity: NSObject, MKAnnotation, Decodable {
+    let titleA: String
     let locationName: String
-    // let discipline: String
-    let coordinate: CLLocationCoordinate2D
+    var coordsLat: Float
+    var coordsLon: Float
     let company: String
+    let wholeDescription: String
+    let date: String
+    let timeStart: String
+    let durationHours: Double
+    let creatorEmail: String
+
+    lazy var coordinate : CLLocationCoordinate2D = {
+        return CLLocationCoordinate2D(latitude: Double(coordsLat), longitude: Double(coordsLon))
+    }()
     
-    init(title: String, locationName: String, discipline: String, coordinate: CLLocationCoordinate2D, company: String) {
-        self.title = title
+    init(titleA: String, locationName: String, coordsLat: Float, coordsLon: Float, company: String, wholeDescription: String, date: String, timeStart: String, durationHours: Double, creatorEmail: String) {
+        self.titleA = titleA
         self.locationName = locationName
-        // self.discipline = discipline
-        self.coordinate = coordinate
+        self.coordsLat = coordsLat
+        self.coordsLon = coordsLon
         self.company = company
+        self.wholeDescription = wholeDescription
+        self.date = date
+        self.timeStart = timeStart
+        self.durationHours = durationHours
+        self.creatorEmail = creatorEmail
         
         super.init()
     }
     
-    init?(json: [Any]) {
-        // 1
-        self.title = json[16] as? String ?? "No Title"
-        self.locationName = json[12] as! String
-        //self.discipline = json[15] as! String
-        // 2
-        if let latitude = Double(json[18] as! String),
-            let longitude = Double(json[19] as! String) {
-            self.coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        } else {
-            self.coordinate = CLLocationCoordinate2D()
-        }
-        self.company = json[10] as! String
+    var title: String? {
+        return titleA
     }
     
     var subtitle: String? {

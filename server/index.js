@@ -128,14 +128,15 @@ app.post('/activities', (req, res) => {
   db.collection('users').findOne({ token: req.body.authToken }).then(user => {
     if(user) {
       db.collection('activities').insertOne({
-          title: req.body.title,
+          titleA: req.body.title,
           locationName: req.body.locationName,
-          coordinates: [parseFloat(req.body.coordsLat), parseFloat(req.body.coordsLon)],
+          coordsLat: parseFloat(req.body.coordsLat),
+          coordsLon: parseFloat(req.body.coordsLon),
           company: req.body.company,
-          description: req.body.description,
+          wholeDescription: req.body.description,
           date: req.body.date,
           timeStart: req.body.timeStart,
-          durationHours: req.body.durationHours,
+          durationHours: parseFloat(req.body.durationHours),
           creatorEmail: user.email
       }).then(result => {
         res.send({ result: "OK" });

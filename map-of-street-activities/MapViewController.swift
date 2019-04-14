@@ -25,6 +25,39 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     // Create a CLLocationManager
     let locationManager = CLLocationManager()
     
+    func loadInitialData() {
+        let request = URLRequest(url: URL(string: "http://localhost/activities")!)
+        
+        print("request: ", request as Any)
+        
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            guard responseError == nil else {
+                print("error: ", responseError as Any)
+                return
+            }
+            
+            print("data: ", responseData!)
+            
+            let decoder = JSONDecoder()
+            
+            do {
+                let array = try decoder.decode([Activity].self, from: responseData!)
+                
+                DispatchQueue.main.async {
+                    self.activities = array
+                    
+                    self.mapView.addAnnotations(self.activities)
+                }
+            } catch {
+                print("shit...", error)
+            }
+        }
+        
+        task.resume()
+    }
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -41,18 +74,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
         }
-        
-        // show event on map
-        let activity = Activity(title: "Honey festival",
-                              locationName: "Moscow",
-                              discipline: "Free",
-                              coordinate: CLLocationCoordinate2D(latitude: 55.735190, longitude: 37.607971),
-                              company: "Rozetka")
-        
-        mapView.addAnnotation(activity)
-        
-        // loadInitialData()
-        mapView.addAnnotations(activities)
+
+        loadInitialData()
     }
 }
 
@@ -88,7 +111,9 @@ extension MapViewController: MKMapViewDelegate {
     }
 }
 
-/**
+
+
+/*
  let regionRadius: CLLocationDistance = 1000
  
  func centerMapOnLocation(location: CLLocation) {
@@ -98,31 +123,14 @@ extension MapViewController: MKMapViewDelegate {
  }
  */
 
-/**
- func loadInitialData() {
- // Read the .json file into a Data object.
- guard let fileName = Bundle.main.path(forResource: "Activity", ofType: "json")
- else { return }
- let optionalData = try? Data(contentsOf: URL(fileURLWithPath: fileName))
+/*
+ // show event on map
+ let activity = Activity(title: "Honey festival",
+ locationName: "Moscow",
+ discipline: "Free",
+ coordinate: CLLocationCoordinate2D(latitude: 55.735190, longitude: 37.607971),
+ company: "Rozetka")
  
- guard
- let data = optionalData,
- // Obtain a JSON object
- let json = try? JSONSerialization.jsonObject(with: data),
- // Check that the JSON object is a dictionary with String keys and Any values.
- let dictionary = json as? [String: Any],
- // You’re only interested in the JSON object whose key is "data".
- let works = dictionary["data"] as? [[Any]]
- else {
- return
- }
- 
- /*
- let validWorks = works.flatMap {
- Activity(json: $0)
- }
+ mapView.addAnnotation(activity)
  */
- 
- // activities.append(contentsOf: validWorks)
- }
- */
+

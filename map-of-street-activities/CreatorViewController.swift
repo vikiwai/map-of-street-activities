@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CreatorViewController: UITabBarController {
+class CreatorViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

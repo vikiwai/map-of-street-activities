@@ -56,7 +56,7 @@ class ViewController: UIViewController {
                         
                         DispatchQueue.main.async {
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                            let newViewController = storyBoard.instantiateViewController(withIdentifier: "mapController") as! MapViewController
+                            let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
                             self.present(newViewController, animated: true, completion: nil)
                         }
                     }
@@ -81,25 +81,13 @@ class ViewController: UIViewController {
         } catch {
             print("Что-то всё же пошло не так... Но что? I have no idea!")
         }
-        
-        
     }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-}
-
-
-extension String {
-    func toJSON() -> Any? {
-        guard let data = self.data(using: .utf8, allowLossyConversion: true) else { return nil }
-        return try? JSONSerialization.jsonObject(with: data, options: .mutableContainers)
     }
 }

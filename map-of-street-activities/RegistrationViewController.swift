@@ -84,7 +84,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
 
                         DispatchQueue.main.async{
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                            let newViewController = storyBoard.instantiateViewController(withIdentifier: "mapController") as! MapViewController
+                            let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
                             self.present(newViewController, animated: true, completion: nil)
                         }
                     }
