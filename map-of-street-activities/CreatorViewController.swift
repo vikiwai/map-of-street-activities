@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import CoreData
 
 class CreatorViewController: UIViewController {
 
+    var authToken: NSManagedObject?
+    
     @IBOutlet weak var inputTitleField: UITextField!
     @IBOutlet weak var inputAddressField: UITextField!
     @IBOutlet weak var inputLatitudeField: UITextField!

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController {
     
@@ -15,6 +16,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var inputEmailField: UITextField!
     
     @IBOutlet weak var inputPasswordField: UITextField!
+    
+    var authToken: NSManagedObject?
     
     @IBAction func requestRegistration(_ sender: Any) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -52,9 +55,9 @@ class ViewController: UIViewController {
                     
                     let dict = utf8Representation.toJSON() as? [String: String]
                     if dict!["status"]! == "OK" {
-                        let authToken = dict!["token"]!
-                        
                         DispatchQueue.main.async {
+                            self.save(token: dict!["token"]!)
+                            // print(self.authToken!)
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
                             self.present(newViewController, animated: true, completion: nil)
@@ -89,5 +92,32 @@ class ViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    func save(token: String) {
+        
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        let entity =
+            NSEntityDescription.entity(forEntityName: "Token",
+                                       in: managedContext)!
+        
+        let t = NSManagedObject(entity: entity,
+                                insertInto: managedContext)
+        
+        t.setValue(token, forKeyPath: "token")
+        
+        do {
+            try managedContext.save()
+            authToken = t
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
     }
 }
