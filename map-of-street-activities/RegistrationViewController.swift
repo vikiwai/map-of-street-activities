@@ -11,10 +11,10 @@ import CoreData
 
 class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    var authToken: NSManagedObject?
+    
     @IBOutlet weak var inputFirstNameField: UITextField!
-    
     @IBOutlet weak var inputLastNameField: UITextField!
-    
     
     let myPickerData: Array<String> = ["Rather not tell", "Female", "Male"]
     
@@ -32,28 +32,20 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     
     func pickerView( _ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         inputGenderField.text = myPickerData[row]
-        self.view.endEditing(true)
     }
 
     @IBOutlet weak var inputDateOfBirthField: UITextField!
-    
     @IBOutlet weak var inputGenderField: UITextField!
     
     private var datePicker: UIDatePicker?
-    
     private var genderPicker = UIPickerView()
     
     @IBOutlet weak var inputEmailField: UITextField!
-    
     @IBOutlet weak var inputPasswordField: UITextField!
-    
     @IBOutlet weak var inputConfrirmPasswordField: UITextField!
     
-    var authToken: NSManagedObject?
-    
-    
     @IBAction func buttonCreateAccount(_ sender: Any) {
-        var request = URLRequest(url: URL(string: "http://localhost/users")!)
+        var request = URLRequest(url: URL(string: "http://vikiwai.local/users")!)
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
@@ -125,22 +117,11 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
         datePicker?.datePickerMode = .date
         datePicker?.addTarget(self, action: #selector(RegistrationViewController.dateChanged(datePicker:)), for: .valueChanged)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegistrationViewController.viewTapped(gestureRecognizer:)))
-        
-        view.addGestureRecognizer(tapGesture)
-        
         inputDateOfBirthField.inputView = datePicker
-        
         inputGenderField.inputView = genderPicker
-        
         genderPicker.delegate = self
         
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer) {
-        
-        view.endEditing(true)
+        self.hideKeyboardWhenTappedAround()
     }
     
     @objc func dateChanged(datePicker: UIDatePicker) {
@@ -149,8 +130,6 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
         dateFormatter.dateFormat = "dd/MM/yyyy"
         
         inputDateOfBirthField.text = dateFormatter.string(from: datePicker.date)
-        
-        view.endEditing(true)
     }
     
     func save(token: String) {
@@ -187,3 +166,4 @@ extension String {
         return try? JSONSerialization.jsonObject(with: data, options: .mutableContainers)
     }
 }
+

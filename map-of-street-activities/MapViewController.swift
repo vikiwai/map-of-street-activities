@@ -17,17 +17,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
 
     var activities: [Activity] = []
     
-    // The location manager will update the delegate function.
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
-    }
-    
     // Create a CLLocationManager
     var locationManager = CLLocationManager()
     
+    // The location manager will update the delegate function.
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations[0]
+        
+        let span: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        let myLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
+        print(myLocation.latitude)
+        print(myLocation.longitude)
+        let region: MKCoordinateRegion = MKCoordinateRegion(center: myLocation, span: span)
+        mapView.setRegion(region, animated: true)
+        
+        self.mapView.showsUserLocation = true
+    }
+    
     func loadInitialData() {
-        let request = URLRequest(url: URL(string: "http://localhost/activities")!)
+        let request = URLRequest(url: URL(string: "http://vikiwai.local/activities")!)
         
         print("request: ", request as Any)
         
@@ -75,6 +83,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
+            print("URA")
         } else {
             print("Turn on location services or GPS")
         }
@@ -114,27 +123,3 @@ extension MapViewController: MKMapViewDelegate {
         return view
     }
 }
-
-
-
-/*
- let regionRadius: CLLocationDistance = 1000
- 
- func centerMapOnLocation(location: CLLocation) {
- let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
- latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
- mapView.setRegion(coordinateRegion, animated: true)
- }
- */
-
-/*
- // show event on map
- let activity = Activity(title: "Honey festival",
- locationName: "Moscow",
- discipline: "Free",
- coordinate: CLLocationCoordinate2D(latitude: 55.735190, longitude: 37.607971),
- company: "Rozetka")
- 
- mapView.addAnnotation(activity)
- */
-

@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func requestEntry(_ sender: Any) {
-        var request = URLRequest(url: URL(string: "http://localhost/auth")!)
+        var request = URLRequest(url: URL(string: "http://vikiwai.local/auth")!)
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
@@ -87,6 +87,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
     }
     
     override func didReceiveMemoryWarning() {
@@ -118,5 +119,17 @@ class ViewController: UIViewController {
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
+    }
+}
+
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
