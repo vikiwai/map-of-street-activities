@@ -6,7 +6,7 @@ const uuidv4 = require('uuid/v4');
 const MongoClient = require('mongodb').MongoClient
 
 const app = express();
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 let db;
@@ -157,5 +157,9 @@ MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }
 
   db = client.db('viker');
 
-  app.listen(80);
+  const port = 80;
+
+  console.log(`Will listen on port ${port}...`)
+
+  app.listen(port);
 });
