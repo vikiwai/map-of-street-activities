@@ -44,10 +44,16 @@ const kudagoCats = [
   'yarmarki-razvlecheniya-yarmarki'
 ];
 
-const getKudaGoShit = () => {
-  console.log("Requesting events from KugaGo...");
+const saveKudagoEvents = (nPage) => {
+  console.log("Requesting page", nPage, "of events from KugaGo...");
 
-  const reqUrl = `https://kudago.com/public-api/v1.4/events/?fields=id,title,description,dates,place,images&expand=place&page_size=100&location=msk&categories=${kudagoCats.join(',')}`;
+  let reqUrl = 'https://kudago.com/public-api/v1.4/events/'
+  reqUrl += '?fields=' + ['id', 'title', 'description', 'dates', 'place', 'images'].join(',');
+  reqUrl += '&expand=place';
+  reqUrl += '&page_size=100';
+  reqUrl += '&page='+ nPage;
+  reqUrl += '&location=msk';
+  reqUrl += '&categories=' + kudagoCats.join(',');
 
   request(reqUrl, { json: true }, (err, res) => {
     if(err) {
@@ -98,12 +104,12 @@ const getKudaGoShit = () => {
           console.log("New event:", eventInfo.id, eventInfo.title);
         });
       });
-      
-    })
-  });
-}
+    });
 
-MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
+  });
+};
+
+MongoClient.connect('mongodb://localhost:27017/', { useNewUrlParser: true }, (err, client) => {
   if(err) {
     throw err;
   }
@@ -112,5 +118,5 @@ MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }
 
   console.log("Database connection OK");
 
-  getKudaGoShit();
+  saveKudagoEvents(2);
 });
