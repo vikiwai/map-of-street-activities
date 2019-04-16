@@ -26,8 +26,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         
         let span: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         let myLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
-        print(myLocation.latitude)
-        print(myLocation.longitude)
         let region: MKCoordinateRegion = MKCoordinateRegion(center: myLocation, span: span)
         mapView.setRegion(region, animated: true)
         
