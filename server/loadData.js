@@ -121,6 +121,7 @@ const savePageOfEvents = (nPage) => {
     reqUrl += '&page_size=100';
     reqUrl += '&page='+ nPage;
     reqUrl += '&location=msk';
+    reqUrl += '&order_by=-publication_date';
     reqUrl += '&categories=' + kudagoCats.join(',');
 
     request(reqUrl, { json: true }, (err, res) => {
