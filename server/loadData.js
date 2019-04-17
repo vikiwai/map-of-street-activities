@@ -93,11 +93,9 @@ const saveAnEvent = eventInfo => {
       kudagoId: eventInfo.id
     };
 
-    const dbActivites = db.collection('activities');
-
-    dbActivites.findOne({ creatorEmail: 'kudago', kudagoId: eventInfo.id }).then(result => {
+    db.collection('activities').findOne({ creatorEmail: 'kudago', kudagoId: eventInfo.id }).then(result => {
       if(result) {
-          resolve(0)
+          resolve(0);
       }
       else {
         db.collection('activities').insertOne(activityRecord).then(result => {
@@ -105,13 +103,15 @@ const saveAnEvent = eventInfo => {
             resolve(1);
           }
           else {
-            reject(result);
+            resolve(0);
           }
         });
       }
     });
   });
 };
+
+let nTotal = null;
 
 const savePageOfEvents = (nPage) => {
   return new Promise((resolve, reject) => {
@@ -122,6 +122,7 @@ const savePageOfEvents = (nPage) => {
     reqUrl += '&page='+ nPage;
     reqUrl += '&location=msk';
     reqUrl += '&order_by=-publication_date';
+    reqUrl += '&actual_since=' + parseInt(Date.now() / 1000);
     reqUrl += '&categories=' + kudagoCats.join(',');
 
     request(reqUrl, { json: true }, (err, res) => {
@@ -132,31 +133,39 @@ const savePageOfEvents = (nPage) => {
 
       const { count, results } = res.body;
 
-      console.log("Got", results.length, "events of the total", count);
+      if(!nTotal) {
+        console.log("There seems to be a total of", nTotal = count, "events");
+      }
 
-      Promise.all(results.map(saveAnEvent)).then(results => {
-        resolve(results.reduce((x, y) => x + y));
+      Promise.all(results.map(saveAnEvent)).then(xs => {
+        resolve(xs.reduce((x, y) => x + y));
       });
     });
   });
 };
 
-MongoClient.connect('mongodb://localhost:27017/', { useNewUrlParser: true }, (err, client) => {
+MongoClient.connect('mongodb://localhost:27017/', { useNewUrlParser: true }, async(err, client) => {
   if(err) {
     throw err;
   }
 
+  console.log("Will now load the current events from KudaGo...")
+
   db = client.db('viker');
 
-  console.log("Database connection OK");
+  let nTotalSaved = 0;
 
-  const nPage = parseInt(process.argv[2]);
+  for(let i = 1; !nTotal || (i - 1) * 100 < nTotal; i++) {
+    console.log("Requesting page", i + "...");
 
-  console.log("Requesting page", nPage, "of events from KugaGo...");
+    const nSaved = await savePageOfEvents(i);
 
-  savePageOfEvents(nPage).then(result => {
-    console.log("Loaded", result, "new events.");
+    // console.log("Loaded", nSaved, "new events.");
 
-    process.exit();
-  });
+    nTotalSaved += nSaved;
+  }
+
+  console.log("Processed", nTotal, "events,", nTotalSaved, "of them new.");
+
+  client.close();
 });
