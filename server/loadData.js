@@ -1,8 +1,7 @@
 
 const request = require('request');
 
-const MongoClient = require('mongodb').MongoClient
-let db;
+const MongoClient = require('mongodb').MongoClient;
 
 const kudagoCats = [
   'ball',
@@ -59,7 +58,7 @@ const selectDate = eventDates => {
   return null;
 };
 
-const saveAnEvent = eventInfo => {
+const saveAnEvent = (db, eventInfo) => {
   return new Promise((resolve, reject) => {
     if(!eventInfo.place) {
       resolve(0);
@@ -113,7 +112,7 @@ const saveAnEvent = eventInfo => {
 
 let nTotal = null;
 
-const savePageOfEvents = (nPage) => {
+const savePageOfEvents = (db, nPage) => {
   return new Promise((resolve, reject) => {
     let reqUrl = 'https://kudago.com/public-api/v1.4/events/'
     reqUrl += '?fields=' + ['id', 'title', 'description', 'dates', 'place', 'images'].join(',');
@@ -137,11 +136,27 @@ const savePageOfEvents = (nPage) => {
         console.log("There seems to be a total of", nTotal = count, "events");
       }
 
-      Promise.all(results.map(saveAnEvent)).then(xs => {
+      Promise.all(results.map(result => saveAnEvent(db, result))).then(xs => {
         resolve(xs.reduce((x, y) => x + y));
       });
     });
   });
+};
+
+const saveNewEvents = async(db) => {
+  let nTotalSaved = 0;
+
+  for(let i = 1; !nTotal || (i - 1) * 100 < nTotal; i++) {
+    console.log("Requesting page", i + "...");
+
+    const nSaved = await savePageOfEvents(db, i);
+
+    // console.log("Loaded", nSaved, "new events.");
+
+    nTotalSaved += nSaved;
+  }
+
+  console.log("Processed", nTotal, "events,", nTotalSaved, "of them new.");
 };
 
 MongoClient.connect('mongodb://localhost:27017/', { useNewUrlParser: true }, async(err, client) => {
@@ -151,21 +166,7 @@ MongoClient.connect('mongodb://localhost:27017/', { useNewUrlParser: true }, asy
 
   console.log("Will now load the current events from KudaGo...")
 
-  db = client.db('viker');
-
-  let nTotalSaved = 0;
-
-  for(let i = 1; !nTotal || (i - 1) * 100 < nTotal; i++) {
-    console.log("Requesting page", i + "...");
-
-    const nSaved = await savePageOfEvents(i);
-
-    // console.log("Loaded", nSaved, "new events.");
-
-    nTotalSaved += nSaved;
-  }
-
-  console.log("Processed", nTotal, "events,", nTotalSaved, "of them new.");
+  await saveNewEvents(client.db('viker'));
 
   client.close();
 });
