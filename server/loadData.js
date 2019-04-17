@@ -44,6 +44,21 @@ const kudagoCats = [
   'yarmarki-razvlecheniya-yarmarki'
 ];
 
+const selectDate = eventDates => {
+  for(let i = 0; i < eventDates.length; i++) {
+    const date = {
+      start: new Date(eventDates[i].start * 1000),
+      end: new Date(eventDates[i].end * 1000)
+    };
+
+    if(new Date() < date.end) {
+      return date;
+    }
+  }
+
+  return null;
+};
+
 const saveAnEvent = eventInfo => {
   return new Promise((resolve, reject) => {
     if(!eventInfo.place) {
@@ -51,12 +66,18 @@ const saveAnEvent = eventInfo => {
       return;
     }
 
-    const tStart = eventInfo.dates[0].start;
-    const tEnd = eventInfo.dates[0].end;
+    const date = selectDate(eventInfo.dates);
 
-    let [startDate, startTime] = new Date(tStart * 1000).toISOString().split('T');
+    if(!date) {
+      console.log(eventInfo.id + ":", "no dates or all have passed");
+      resolve(0);
+      return;
+    }
 
+    let [startDate, startTime] = date.start.toISOString().split('T');
     startTime = startTime.substr(0, startTime.lastIndexOf(':'));
+
+    const durationHours = (date.end - date.start) / 3600 / 1000;
 
     const activityRecord = {
       titleA: eventInfo.title,
@@ -67,7 +88,7 @@ const saveAnEvent = eventInfo => {
       wholeDescription: eventInfo.description,
       date: startDate,
       timeStart: startTime,
-      durationHours: (tEnd - tStart) / 3600,
+      durationHours: durationHours,
       creatorEmail: 'kudago',
       kudagoId: eventInfo.id
     };
@@ -111,8 +132,6 @@ const savePageOfEvents = (nPage) => {
       const { count, results } = res.body;
 
       console.log("Got", results.length, "events of the total", count);
-
-      let nLeft = results.length;
 
       Promise.all(results.map(saveAnEvent)).then(results => {
         resolve(results.reduce((x, y) => x + y));
