@@ -150,6 +150,8 @@ app.post('/activities', (req, res) => {
   })
 });
 
+const loadData = require('./loadData');
+
 MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
   if(err) {
     throw err;
@@ -160,6 +162,8 @@ MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }
   const port = 80;
 
   console.log(`Will listen on port ${port}...`)
+
+  setInterval(async() => loadData(db), 10 * 60 * 1000);
 
   app.listen(port);
 });

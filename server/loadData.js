@@ -144,6 +144,8 @@ const savePageOfEvents = (db, nPage) => {
 };
 
 const saveNewEvents = async(db) => {
+  console.log("Will now load the current events from KudaGo...")
+
   let nTotalSaved = 0;
 
   for(let i = 1; !nTotal || (i - 1) * 100 < nTotal; i++) {
@@ -159,14 +161,4 @@ const saveNewEvents = async(db) => {
   console.log("Processed", nTotal, "events,", nTotalSaved, "of them new.");
 };
 
-MongoClient.connect('mongodb://localhost:27017/', { useNewUrlParser: true }, async(err, client) => {
-  if(err) {
-    throw err;
-  }
-
-  console.log("Will now load the current events from KudaGo...")
-
-  await saveNewEvents(client.db('viker'));
-
-  client.close();
-});
+module.exports = saveNewEvents;
