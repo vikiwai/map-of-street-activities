@@ -147,7 +147,15 @@ app.post('/activities', (req, res) => {
     }
   }).catch(err => {
     console.log(err);
-  })
+  });
+});
+
+app.get('/check-publishing-rights', (req, res) => {
+  console.log("POST /check-publishing-rights:", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    res.send({ canPublish: (user && (user.canPublish || user.isAdmin)) || false });
+  });
 });
 
 const loadData = require('./loadData');
