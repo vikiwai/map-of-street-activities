@@ -1,8 +1,7 @@
 
 const request = require('request');
 
-const MongoClient = require('mongodb').MongoClient
-let db;
+const MongoClient = require('mongodb').MongoClient;
 
 const kudagoCats = [
   'ball',
@@ -44,19 +43,40 @@ const kudagoCats = [
   'yarmarki-razvlecheniya-yarmarki'
 ];
 
-const saveAnEvent = eventInfo => {
+const selectDate = eventDates => {
+  for(let i = 0; i < eventDates.length; i++) {
+    const date = {
+      start: new Date(eventDates[i].start * 1000),
+      end: new Date(eventDates[i].end * 1000)
+    };
+
+    if(new Date() < date.end) {
+      return date;
+    }
+  }
+
+  return null;
+};
+
+const saveAnEvent = (db, eventInfo) => {
   return new Promise((resolve, reject) => {
     if(!eventInfo.place) {
       resolve(0);
       return;
     }
 
-    const tStart = eventInfo.dates[0].start;
-    const tEnd = eventInfo.dates[0].end;
+    const date = selectDate(eventInfo.dates);
 
-    let [startDate, startTime] = new Date(tStart * 1000).toISOString().split('T');
+    if(!date) {
+      console.log(eventInfo.id + ":", "no dates or all have passed");
+      resolve(0);
+      return;
+    }
 
+    let [startDate, startTime] = date.start.toISOString().split('T');
     startTime = startTime.substr(0, startTime.lastIndexOf(':'));
+
+    const durationHours = (date.end - date.start) / 3600 / 1000;
 
     const activityRecord = {
       titleA: eventInfo.title,
@@ -67,16 +87,14 @@ const saveAnEvent = eventInfo => {
       wholeDescription: eventInfo.description,
       date: startDate,
       timeStart: startTime,
-      durationHours: (tEnd - tStart) / 3600,
+      durationHours: durationHours,
       creatorEmail: 'kudago',
       kudagoId: eventInfo.id
     };
 
-    const dbActivites = db.collection('activities');
-
-    dbActivites.findOne({ creatorEmail: 'kudago', kudagoId: eventInfo.id }).then(result => {
+    db.collection('activities').findOne({ creatorEmail: 'kudago', kudagoId: eventInfo.id }).then(result => {
       if(result) {
-          resolve(0)
+          resolve(0);
       }
       else {
         db.collection('activities').insertOne(activityRecord).then(result => {
@@ -84,7 +102,7 @@ const saveAnEvent = eventInfo => {
             resolve(1);
           }
           else {
-            reject(result);
+            resolve(0);
           }
         });
       }
@@ -92,7 +110,9 @@ const saveAnEvent = eventInfo => {
   });
 };
 
-const savePageOfEvents = (nPage) => {
+let nTotal = null;
+
+const savePageOfEvents = (db, nPage) => {
   return new Promise((resolve, reject) => {
     let reqUrl = 'https://kudago.com/public-api/v1.4/events/'
     reqUrl += '?fields=' + ['id', 'title', 'description', 'dates', 'place', 'images'].join(',');
@@ -100,6 +120,8 @@ const savePageOfEvents = (nPage) => {
     reqUrl += '&page_size=100';
     reqUrl += '&page='+ nPage;
     reqUrl += '&location=msk';
+    reqUrl += '&order_by=-publication_date';
+    reqUrl += '&actual_since=' + parseInt(Date.now() / 1000);
     reqUrl += '&categories=' + kudagoCats.join(',');
 
     request(reqUrl, { json: true }, (err, res) => {
@@ -110,33 +132,33 @@ const savePageOfEvents = (nPage) => {
 
       const { count, results } = res.body;
 
-      console.log("Got", results.length, "events of the total", count);
+      if(!nTotal) {
+        console.log("There seems to be a total of", nTotal = count, "events");
+      }
 
-      let nLeft = results.length;
-
-      Promise.all(results.map(saveAnEvent)).then(results => {
-        resolve(results.reduce((x, y) => x + y));
+      Promise.all(results.map(result => saveAnEvent(db, result))).then(xs => {
+        resolve(xs.reduce((x, y) => x + y));
       });
     });
   });
 };
 
-MongoClient.connect('mongodb://localhost:27017/', { useNewUrlParser: true }, (err, client) => {
-  if(err) {
-    throw err;
+const saveNewEvents = async(db) => {
+  console.log("Will now load the current events from KudaGo...")
+
+  let nTotalSaved = 0;
+
+  for(let i = 1; !nTotal || (i - 1) * 100 < nTotal; i++) {
+    console.log("Requesting page", i + "...");
+
+    const nSaved = await savePageOfEvents(db, i);
+
+    // console.log("Loaded", nSaved, "new events.");
+
+    nTotalSaved += nSaved;
   }
 
-  db = client.db('viker');
+  console.log("Processed", nTotal, "events,", nTotalSaved, "of them new.");
+};
 
-  console.log("Database connection OK");
-
-  const nPage = parseInt(process.argv[2]);
-
-  console.log("Requesting page", nPage, "of events from KugaGo...");
-
-  savePageOfEvents(nPage).then(result => {
-    console.log("Loaded", result, "new events.");
-
-    process.exit();
-  });
-});
+module.exports = saveNewEvents;
