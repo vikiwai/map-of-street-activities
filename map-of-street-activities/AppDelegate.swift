@@ -13,6 +13,7 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var token: String?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.splashScreen()
@@ -29,10 +30,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     @objc func dismissSplashContoller() {
-        let mainVC = UIStoryboard.init(name: "Main", bundle: nil)
-        let rootVC = mainVC.instantiateViewController(withIdentifier: "initController")
-        self.window?.rootViewController = rootVC
-        self.window?.makeKeyAndVisible()
+        fetchAuthToken()
+        if token != nil {
+            let mainVC = UIStoryboard.init(name: "Main", bundle: nil)
+            let rootVC = mainVC.instantiateViewController(withIdentifier: "tarBarController")
+            self.window?.rootViewController = rootVC
+            self.window?.makeKeyAndVisible()
+        } else {
+            let mainVC = UIStoryboard.init(name: "Main", bundle: nil)
+            let rootVC = mainVC.instantiateViewController(withIdentifier: "initController")
+            self.window?.rootViewController = rootVC
+            self.window?.makeKeyAndVisible()
+        }
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
@@ -101,6 +110,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
+        }
+    }
+    
+    func fetchAuthToken() {
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
+        
+        do {
+            let result = try managedContext.fetch(fetchRequest)
+            for data in result as! [NSManagedObject] {
+                token = (data.value(forKey: "token") as! String)
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
 

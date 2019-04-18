@@ -86,21 +86,8 @@ class ViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        fetchAuthToken()
+        super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
-        
-        print("View")
-        if token == nil {
-            super.viewDidLoad()
-        } else {
-            print("JFHJKFJFJFJFJFJFJF")
-            DispatchQueue.main.async {
-                let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
-                self.present(newViewController, animated: true, completion: nil)
-            }
-        }
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -131,27 +118,6 @@ class ViewController: UIViewController {
             authToken = t
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
-        }
-    }
-    
-    func fetchAuthToken() {
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-                return
-        }
-        
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
-        
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
-        
-        do {
-            let result = try managedContext.fetch(fetchRequest)
-            for data in result as! [NSManagedObject] {
-                token = (data.value(forKey: "token") as! String)
-            }
-        } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
 }
