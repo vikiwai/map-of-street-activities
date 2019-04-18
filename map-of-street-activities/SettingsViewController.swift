@@ -57,6 +57,7 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
         
         let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
             UIAlertAction in NSLog("Yes")
+            
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "initController")
             self.present(newViewController, animated: true, completion: nil)
@@ -72,6 +73,7 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
         
         self.present(alertController, animated: true, completion: nil)
     }
+
     
     @IBAction func aboutApp(_ sender: Any) {
     }
