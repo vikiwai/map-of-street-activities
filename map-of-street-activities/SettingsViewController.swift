@@ -57,10 +57,6 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
         
         let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
             UIAlertAction in NSLog("Yes")
-            
-            UserDefaults.standard.set(false, forKey: self.authToken!)
-            UserDefaults.standard.synchronize()
-            
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "initController")
             self.present(newViewController, animated: true, completion: nil)

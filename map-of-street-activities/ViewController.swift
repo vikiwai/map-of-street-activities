@@ -58,8 +58,6 @@ class ViewController: UIViewController {
                     if dict!["status"]! == "OK" {
                         DispatchQueue.main.async {
                             self.save(token: dict!["token"]!)
-                            UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                            UserDefaults.standard.synchronize()
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
                             self.present(newViewController, animated: true, completion: nil)
@@ -88,26 +86,25 @@ class ViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        if authToken == nil {
+        fetchAuthToken()
+        self.hideKeyboardWhenTappedAround()
+        
+        print("View")
+        if token == nil {
             super.viewDidLoad()
-            self.hideKeyboardWhenTappedAround()
         } else {
             print("JFHJKFJFJFJFJFJFJF")
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
             self.present(newViewController, animated: true, completion: nil)
         }
-       
+        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    fileprivate func isLoggedIn() -> Bool {
-        return UserDefaults.standard.bool(forKey: token!)
-    }
-    
+
     func save(token: String) {
         
         guard let appDelegate =
