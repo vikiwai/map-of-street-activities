@@ -58,6 +58,8 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
         let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
             UIAlertAction in NSLog("Yes")
             
+            self.deleteData()
+            
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "initController")
             self.present(newViewController, animated: true, completion: nil)
@@ -83,13 +85,11 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
     }
     
     func fetchAuthToken() {
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 return
         }
         
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
+        let managedContext = appDelegate.persistentContainer.viewContext
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
         
@@ -101,5 +101,27 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
+    }
+    
+    func deleteData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
+        
+        do {
+            let result = try managedContext.fetch(fetchRequest)
+            
+            for data in result as! [NSManagedObject] {
+                managedContext.delete(data)
+                try managedContext.save()
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        
     }
 }
