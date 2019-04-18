@@ -18,6 +18,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var inputPasswordField: UITextField!
     
     var authToken: NSManagedObject?
+    var token: String?
     
     @IBAction func requestRegistration(_ sender: Any) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -57,6 +58,8 @@ class ViewController: UIViewController {
                     if dict!["status"]! == "OK" {
                         DispatchQueue.main.async {
                             self.save(token: dict!["token"]!)
+                            UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                            UserDefaults.standard.synchronize()
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
                             self.present(newViewController, animated: true, completion: nil)
@@ -66,8 +69,7 @@ class ViewController: UIViewController {
                         DispatchQueue.main.async{
                             let alertController = UIAlertController(title: "Ooops", message: "Wrong e-mail or password", preferredStyle: .alert)
                             let okAction = UIAlertAction(title: "Fix", style: UIAlertAction.Style.default) {
-                                UIAlertAction in
-                                NSLog("OK")
+                                UIAlertAction in NSLog("OK")
                             }
                             alertController.addAction(okAction)
                             self.present(alertController, animated: true, completion: nil)
@@ -86,12 +88,24 @@ class ViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        self.hideKeyboardWhenTappedAround()
+        if authToken == nil {
+            super.viewDidLoad()
+            self.hideKeyboardWhenTappedAround()
+        } else {
+            print("JFHJKFJFJFJFJFJFJF")
+            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
+            self.present(newViewController, animated: true, completion: nil)
+        }
+       
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    fileprivate func isLoggedIn() -> Bool {
+        return UserDefaults.standard.bool(forKey: token!)
     }
     
     func save(token: String) {
@@ -118,6 +132,27 @@ class ViewController: UIViewController {
             authToken = t
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    func fetchAuthToken() {
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+                return
+        }
+        
+        let managedContext =
+            appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
+        
+        do {
+            let result = try managedContext.fetch(fetchRequest)
+            for data in result as! [NSManagedObject] {
+                token = (data.value(forKey: "token") as! String)
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
 }

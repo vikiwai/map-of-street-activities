@@ -141,47 +141,50 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     }
     
     func passwordsСheck(what: inout Bool) {
-        DispatchQueue.main.async {
-            var confirmed = false
-            var notEmpty = false
+        var confirmed = false
+        var notEmpty = false
+        
+        if self.inputPasswordField.text! != self.inputConfirmPasswordField.text! {
+            confirmed = false
             
-            if self.inputPasswordField.text! != self.inputConfirmPasswordField.text! {
-                confirmed = false
+            DispatchQueue.main.async {
                 let alertController = UIAlertController(title: "Hey!", message: "Entered passwords don't match", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "Confirm password again", style: UIAlertAction.Style.default) {
                     UIAlertAction in NSLog("OK")
                 }
                 alertController.addAction(okAction)
                 self.present(alertController, animated: true, completion: nil)
-            } else {
-                confirmed = true
             }
-            print(confirmed)
-        
-            // DispatchQueue.global()
-            if self.inputPasswordField.text! == "" || self.inputConfirmPasswordField.text! == "" {
-                notEmpty = false
+        } else {
+            confirmed = true
+        }
+        print(confirmed)
+    
+        if self.inputPasswordField.text! == "" || self.inputConfirmPasswordField.text! == "" {
+            notEmpty = false
+            
+            DispatchQueue.main.async {
                 let alertController = UIAlertController(title: "Hey!", message: "Passwords field are empty", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "Enter password again", style: UIAlertAction.Style.default) {
                     UIAlertAction in NSLog("OK")
                 }
                 alertController.addAction(okAction)
                 self.present(alertController, animated: true, completion: nil)
-            } else {
-                notEmpty = true
             }
-            print(notEmpty)
-            
-            print("_____________")
-            
-            if confirmed && notEmpty {
-                self.what = true
-            } else {
-                self.what = false
-            }
-            
-            print(self.what)
+        } else {
+            notEmpty = true
         }
+        print(notEmpty)
+        
+        print("_____________")
+        
+        if confirmed && notEmpty {
+            what = true
+        } else {
+            what = false
+        }
+        
+        print(what)
     }
     
     func save(token: String) {
