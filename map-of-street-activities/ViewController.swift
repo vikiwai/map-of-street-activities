@@ -12,23 +12,22 @@ import CoreData
 class ViewController: UIViewController {
     
     @IBOutlet weak var labelOfRequestRegistrationButton: UIButton!
-    
     @IBOutlet weak var inputEmailField: UITextField!
-    
     @IBOutlet weak var inputPasswordField: UITextField!
     
     var authToken: NSManagedObject?
     var token: String?
     
+    // Go to user registration
     @IBAction func requestRegistration(_ sender: Any) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let newViewController = storyBoard.instantiateViewController(withIdentifier: "registrationController") as! RegistrationViewController
         self.present(newViewController, animated: true, completion: nil)
     }
     
+    // Go to the main screen of the application if the user is already registered
     @IBAction func requestEntry(_ sender: Any) {
         var request = URLRequest(url: URL(string: "http://vikiwai.local/auth")!)
-        
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         
@@ -50,16 +49,18 @@ class ViewController: UIViewController {
                     return
                 }
                 
-                // APIs usually respond with the data you just sent in your POST request
                 if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
                     print("response: ", utf8Representation)
                     
                     let dict = utf8Representation.toJSON() as? [String: String]
+                    
                     if dict!["status"]! == "OK" {
                         DispatchQueue.main.async {
                             self.save(token: dict!["token"]!)
+                            
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
+                            
                             self.present(newViewController, animated: true, completion: nil)
                         }
                     }
@@ -70,18 +71,17 @@ class ViewController: UIViewController {
                                 UIAlertAction in NSLog("OK")
                             }
                             alertController.addAction(okAction)
+                            
                             self.present(alertController, animated: true, completion: nil)
                         }
                     }
-                    
                 } else {
-                    print("no readable data received in response")
+                    print("No readable data received in response")
                 }
             }
-            
             task.resume()
         } catch {
-            print("Что-то всё же пошло не так... Но что? I have no idea!")
+            print("Something was wrong")
         }
     }
     
@@ -95,27 +95,18 @@ class ViewController: UIViewController {
     }
 
     func save(token: String) {
-        
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 return
         }
         
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
-        
-        let entity =
-            NSEntityDescription.entity(forEntityName: "Token",
-                                       in: managedContext)!
-        
-        let t = NSManagedObject(entity: entity,
-                                insertInto: managedContext)
-        
-        t.setValue(token, forKeyPath: "token")
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "Token", in: managedContext)!
+        let thisToken = NSManagedObject(entity: entity, insertInto: managedContext)
+        thisToken.setValue(token, forKeyPath: "token")
         
         do {
             try managedContext.save()
-            authToken = t
+            authToken = thisToken
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
         }
@@ -124,7 +115,8 @@ class ViewController: UIViewController {
 
 extension UIViewController {
     func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
+                                                                 action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }

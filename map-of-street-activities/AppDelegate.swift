@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    // LaunchScreen
+    // Show the Launch Screen
     private func splashScreen() {
         let launchScreenVC = UIStoryboard.init(name: "LaunchScreen", bundle: nil)
         let rootVC = launchScreenVC.instantiateViewController(withIdentifier: "splashController")
@@ -30,13 +30,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     @objc func dismissSplashContoller() {
+        // Get a token from the Core data
         fetchAuthToken()
+        
+        // If the token is saved, then show the main application screen
         if token != nil {
             let mainVC = UIStoryboard.init(name: "Main", bundle: nil)
             let rootVC = mainVC.instantiateViewController(withIdentifier: "tarBarController")
             self.window?.rootViewController = rootVC
             self.window?.makeKeyAndVisible()
-        } else {
+        }
+        // If there is no token, then show the application login screen
+        else {
             let mainVC = UIStoryboard.init(name: "Main", bundle: nil)
             let rootVC = mainVC.instantiateViewController(withIdentifier: "initController")
             self.window?.rootViewController = rootVC
@@ -99,14 +104,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Core Data Saving support
 
-    func saveContext () {
+    func saveContext() {
         let context = persistentContainer.viewContext
         if context.hasChanges {
             do {
                 try context.save()
             } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
@@ -114,14 +117,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func fetchAuthToken() {
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 return
         }
         
-        let managedContext =
-            appDelegate.persistentContainer.viewContext
-        
+        let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
         
         do {

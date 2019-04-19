@@ -44,21 +44,12 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var inputPasswordField: UITextField!
     @IBOutlet weak var inputConfirmPasswordField: UITextField!
     
-    var what: Bool = false
-    
     @IBAction func buttonCreateAccount(_ sender: Any) {
-        print("GO")
-        passwordsСheck(what: &self.what)
-        print(self.what)
-        
-        if !what {
+        if !passwordsСheck() {
             return
         }
         
-        print("DKFJSKDAFHSJBFKL")
-        
         var request = URLRequest(url: URL(string: "http://vikiwai.local/users")!)
-        
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         
@@ -84,7 +75,6 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
                     return
                 }
                 
-                // APIs usually respond with the data you just sent in your POST request
                 if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
                     print("response: ", utf8Representation)
                     
@@ -93,9 +83,10 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
                     if dict!["status"]! == "OK" {
                         DispatchQueue.main.async {
                             self.save(token: dict!["token"]!)
-                            print(self.authToken!)
+                            
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
+                            
                             self.present(newViewController, animated: true, completion: nil)
                         }
                     } else {
@@ -105,6 +96,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
                                 UIAlertAction in NSLog("OK")
                             }
                             alertController.addAction(okAction)
+                            
                             self.present(alertController, animated: true, completion: nil)
                         }
                     }
@@ -114,8 +106,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
             }
             task.resume()
         } catch {
-            print("Something was wrong... I have no idea!")
-            fatalError()
+            print("Something was wrong")
         }
     }
 
@@ -134,13 +125,17 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
         self.hideKeyboardWhenTappedAround()
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
     @objc func dateChanged(datePicker: UIDatePicker) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
         inputDateOfBirthField.text = dateFormatter.string(from: datePicker.date)
     }
     
-    func passwordsСheck(what: inout Bool) {
+    func passwordsСheck() -> Bool {
         var confirmed = false
         var notEmpty = false
         
@@ -153,12 +148,12 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
                     UIAlertAction in NSLog("OK")
                 }
                 alertController.addAction(okAction)
+                
                 self.present(alertController, animated: true, completion: nil)
             }
         } else {
             confirmed = true
         }
-        print(confirmed)
     
         if self.inputPasswordField.text! == "" || self.inputConfirmPasswordField.text! == "" {
             notEmpty = false
@@ -169,22 +164,18 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
                     UIAlertAction in NSLog("OK")
                 }
                 alertController.addAction(okAction)
+                
                 self.present(alertController, animated: true, completion: nil)
             }
         } else {
             notEmpty = true
         }
-        print(notEmpty)
-        
-        print("_____________")
         
         if confirmed && notEmpty {
-            what = true
+            return true
         } else {
-            what = false
+            return false
         }
-        
-        print(what)
     }
     
     func save(token: String) {

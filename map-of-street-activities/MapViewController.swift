@@ -34,9 +34,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     
     func loadInitialData() {
         let request = URLRequest(url: URL(string: "http://vikiwai.local/activities")!)
-        
         print("request: ", request as Any)
-        
         let session = URLSession(configuration: .default)
         
         let task = session.dataTask(with: request) { (responseData, response, responseError) in
@@ -54,18 +52,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
                 
                 DispatchQueue.main.async {
                     self.activities = array
-                    
                     self.mapView.addAnnotations(self.activities)
                 }
             } catch {
-                print("shit...", error)
+                print("Something was wrong...", error)
             }
         }
-        
         task.resume()
     }
-    
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,17 +75,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
-            print("URA")
         } else {
             print("Turn on location services or GPS")
         }
 
         loadInitialData()
     }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
-    
     // Return the view for each annotation
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         

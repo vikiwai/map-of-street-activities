@@ -11,7 +11,7 @@ import CoreData
 
 class SettingsViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
-    var authToken: String?
+    var token: String?
     
     
     @IBOutlet weak var inputOldPasswordField: UITextField!
@@ -23,9 +23,10 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
     
     @IBOutlet weak var importImageButton: UIButton!
     
-    var imageView: UIImageView!
+    var imageView: UIImageView = UIImageView()
     
     @IBAction func importImage(_ sender: Any) {
+        
         let image = UIImagePickerController()
         image.delegate = self
         
@@ -84,19 +85,22 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
         super.viewDidLoad()
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
     func fetchAuthToken() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 return
         }
         
         let managedContext = appDelegate.persistentContainer.viewContext
-        
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
         
         do {
             let result = try managedContext.fetch(fetchRequest)
             for data in result as! [NSManagedObject] {
-                authToken = (data.value(forKey: "token") as! String)
+                token = (data.value(forKey: "token") as! String)
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
