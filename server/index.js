@@ -1,4 +1,6 @@
 
+const path = require('path');
+
 const express = require('express');
 
 const uuidv4 = require('uuid/v4');
@@ -155,6 +157,30 @@ app.get('/check-publishing-rights', (req, res) => {
 
   db.collection('users').findOne({ token: req.body.authToken }).then(user => {
     res.send({ canPublish: (user && (user.canPublish || user.isAdmin)) || false });
+  });
+});
+
+app.get('/userpic/:email', (req, res) => {
+  console.log("GET /userpic/" + req.params.email);
+
+  db.collection('users').findOne({ email: req.params.email }).then(user => {
+    if(!user) {
+      res.status(404).send("");
+      return;
+    }
+
+    let { userpicFilename } = user;
+
+    if(!userpicFilename) {
+      if(user.gender === 'female') {
+        userpicFilename = 'default-female.png';
+      }
+      else {
+        userpicFilename = 'default-male.png';
+      }
+    }
+
+    res.sendFile(path.join(__dirname, 'img', userpicFilename));
   });
 });
 
