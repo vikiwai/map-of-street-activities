@@ -210,8 +210,11 @@ app.get('/userpic/:email', (req, res) => {
       if(user.gender === 'Female') {
         userpicFilename = 'default-female.png';
       }
-      else {
+      else if(user.gender === 'Male') {
         userpicFilename = 'default-male.png';
+      }
+      else {
+        userpicFilename = 'default-transgender.png';
       }
     }
 
