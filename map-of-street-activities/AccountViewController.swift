@@ -16,6 +16,8 @@ class AccountViewController: UIViewController {
     
     @IBOutlet weak var imageView: UIImageView!
     
+    @IBOutlet weak var textView: UITextView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchAuthToken()
@@ -42,9 +44,7 @@ class AccountViewController: UIViewController {
                 
                 DispatchQueue.main.async {
                     print(person)
-                    
-                   // self.activities = array
-                   // self.mapView.addAnnotations(self.activities)
+                    self.textView.text = "Full name: \(person.firstName) \(person.lastName) \nGender: \(person.gender) \nDate of Birth: \(person.birthDate) \nE-mail: \(person.email) \nRight for creating event: \(person.canPublish)"
                 }
             } catch {
                 print("Something was wrong...", error)

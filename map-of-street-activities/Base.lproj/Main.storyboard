@@ -574,11 +574,10 @@
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="l5C-O7-r3g">
                                 <rect key="frame" x="12" y="278" width="292" height="228"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="228" id="a4D-NR-MgH"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qx0-HB-Vdq">
@@ -601,6 +600,7 @@
                     <tabBarItem key="tabBarItem" title="Account" image="id-card" id="BHz-vc-ngP"/>
                     <connections>
                         <outlet property="imageView" destination="qx0-HB-Vdq" id="wXc-WE-A9v"/>
+                        <outlet property="textView" destination="l5C-O7-r3g" id="8x4-bS-hpZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QgC-k0-d13" userLabel="First Responder" sceneMemberID="firstResponder"/>
