@@ -16,7 +16,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var inputPasswordField: UITextField!
     
     var authToken: NSManagedObject?
-    var token: String?
     
     // Go to user registration
     @IBAction func requestRegistration(_ sender: Any) {
@@ -56,7 +55,7 @@ class ViewController: UIViewController {
                     
                     if dict!["status"]! == "OK" {
                         DispatchQueue.main.async {
-                            self.save(token: dict!["token"]!)
+                            self.save(token: dict!["token"]!, email: self.inputEmailField.text!)
                             
                             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                             let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
@@ -94,15 +93,17 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
 
-    func save(token: String) {
+    func save(token: String, email: String) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
                 return
         }
         
         let managedContext = appDelegate.persistentContainer.viewContext
         let entity = NSEntityDescription.entity(forEntityName: "Token", in: managedContext)!
+        
         let thisToken = NSManagedObject(entity: entity, insertInto: managedContext)
         thisToken.setValue(token, forKeyPath: "token")
+        thisToken.setValue(email, forKeyPath: "email")
         
         do {
             try managedContext.save()

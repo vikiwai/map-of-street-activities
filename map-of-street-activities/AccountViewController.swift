@@ -11,11 +11,45 @@ import CoreData
 
 class AccountViewController: UIViewController {
 
+    var token: String?
+    var email: String?
+    
     @IBOutlet weak var imageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        fetchAuthToken()
+        
+        print(email)
+        
         imageView.downloaded(from: "http://placehold.jp/100x100.png")
+    }
+    
+    func fetchAuthToken() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
+        
+        //        let pidrRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        //
+        //        do {
+        //            try managedContext.persistentStoreCoordinator!.execute(pidrRequest, with: managedContext)
+        //        } catch let error as NSError {
+        //            // TODO: handle the error
+        //        }
+        
+        do {
+            let result = try managedContext.fetch(fetchRequest)
+            for data in result as! [NSManagedObject] {
+                token = (data.value(forKey: "token") as! String)
+                email = (data.value(forKey: "email") as! String)
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
     }
 }
 

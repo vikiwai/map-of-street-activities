@@ -96,11 +96,19 @@ class CreatorViewController: UIViewController {
     
     func fetchAuthToken() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                return
+            return
         }
         
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
+        
+        //        let pidrRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        //
+        //        do {
+        //            try managedContext.persistentStoreCoordinator!.execute(pidrRequest, with: managedContext)
+        //        } catch let error as NSError {
+        //            // TODO: handle the error
+        //        }
         
         do {
             let result = try managedContext.fetch(fetchRequest)

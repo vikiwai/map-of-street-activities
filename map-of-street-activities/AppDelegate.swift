@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var token: String?
+    var email: String?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.splashScreen()
@@ -124,15 +125,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
         
+//        let pidrRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+//        
+//        do {
+//            try managedContext.persistentStoreCoordinator!.execute(pidrRequest, with: managedContext)
+//        } catch let error as NSError {
+//            // TODO: handle the error
+//        }
+        
         do {
             let result = try managedContext.fetch(fetchRequest)
             for data in result as! [NSManagedObject] {
                 token = (data.value(forKey: "token") as! String)
+                email = (data.value(forKey: "email") as! String)
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
-
 }
 
