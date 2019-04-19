@@ -84,7 +84,7 @@ const saveAnEvent = (db, eventInfo) => {
       coordsLat: eventInfo.place.coords.lat,
       coordsLon: eventInfo.place.coords.lon,
       company: eventInfo.place.title,
-      wholeDescription: eventInfo.description,
+      wholeDescription: eventInfo.description.replace("<p>", "").replace("</p>", ""),
       date: startDate,
       timeStart: startTime,
       durationHours: durationHours,
