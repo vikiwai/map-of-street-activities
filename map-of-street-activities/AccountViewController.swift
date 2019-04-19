@@ -21,6 +21,38 @@ class AccountViewController: UIViewController {
         fetchAuthToken()
         
         imageView.downloaded(from: "http://vikiwai.local/userpic/" + email!)
+        
+        
+        let request = URLRequest(url: URL(string: "http://vikiwai.local/profile/" + token!)!)
+        print("request: ", request as Any)
+        let session = URLSession(configuration: .default)
+        
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            guard responseError == nil else {
+                print("error: ", responseError as Any)
+                return
+            }
+            
+            print("data: ", responseData!)
+            
+            let decoder = JSONDecoder()
+            
+            do {
+                let person = try decoder.decode(Profile.self, from: responseData!)
+                
+                DispatchQueue.main.async {
+                    print(person)
+                    
+                   // self.activities = array
+                   // self.mapView.addAnnotations(self.activities)
+                }
+            } catch {
+                print("Something was wrong...", error)
+            }
+        }
+        task.resume()
+        
+        
     }
     
     func fetchAuthToken() {

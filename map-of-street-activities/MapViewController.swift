@@ -60,6 +60,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
         }
         task.resume()
     }
+    
     var toolBar = UIToolbar()
     
     @IBAction func filterActivities(_ sender: Any) {
