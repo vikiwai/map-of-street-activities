@@ -219,6 +219,18 @@ app.get('/userpic/:email', (req, res) => {
   });
 });
 
+app.get('/profile/:authToken', (req, res) => {
+  console.log("GET /profile/" + req.params.authToken);
+
+  db.collection('users').findOne({ token: req.params.authToken }).then(user => {
+    delete user._id;
+    delete user.token;
+    delete user.userpicFilename;
+
+    res.send(user);
+  });
+});
+
 const loadData = require('./loadData');
 
 MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
