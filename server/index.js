@@ -92,7 +92,7 @@ app.post('/users', (req, res) => {
     else {
       const authToken = uuidv4();
 
-      db.collection('users').insertOne(Object.assign({}, req.body, { token: authToken }));
+      db.collection('users').insertOne(Object.assign({}, req.body, { token: authToken, canPublish: false }));
 
       res.send({ status: "OK", token: authToken });
     }
