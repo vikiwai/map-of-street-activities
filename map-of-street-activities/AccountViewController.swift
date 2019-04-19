@@ -20,8 +20,6 @@ class AccountViewController: UIViewController {
         super.viewDidLoad()
         fetchAuthToken()
         
-        print(email)
-        
         imageView.downloaded(from: "http://placehold.jp/100x100.png")
     }
     
@@ -32,15 +30,7 @@ class AccountViewController: UIViewController {
         
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
-        
-        //        let pidrRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        //
-        //        do {
-        //            try managedContext.persistentStoreCoordinator!.execute(pidrRequest, with: managedContext)
-        //        } catch let error as NSError {
-        //            // TODO: handle the error
-        //        }
-        
+  
         do {
             let result = try managedContext.fetch(fetchRequest)
             for data in result as! [NSManagedObject] {

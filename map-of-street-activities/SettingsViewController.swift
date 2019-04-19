@@ -12,7 +12,7 @@ import CoreData
 class SettingsViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
 
     var token: String?
-    
+    var email: String?
     
     @IBOutlet weak var inputOldPasswordField: UITextField!
     @IBOutlet weak var inputNewPasswordField: UITextField!
@@ -92,7 +92,7 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
     
     func fetchAuthToken() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                return
+            return
         }
         
         let managedContext = appDelegate.persistentContainer.viewContext
@@ -102,6 +102,7 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
             let result = try managedContext.fetch(fetchRequest)
             for data in result as! [NSManagedObject] {
                 token = (data.value(forKey: "token") as! String)
+                email = (data.value(forKey: "email") as! String)
             }
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
