@@ -2,6 +2,7 @@
 const path = require('path');
 
 const express = require('express');
+const fileUpload = require('express-fileupload');
 
 const uuidv4 = require('uuid/v4');
 
@@ -10,6 +11,7 @@ const MongoClient = require('mongodb').MongoClient
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(fileUpload({ limits: { fileSize: 1 * 1024 * 1024 } }));
 
 let db;
 
@@ -65,6 +67,15 @@ app.get('/', (req, res) => {
         <input name="durationHours" placeholder="4.5" />
       <p>
         <input name="authToken" placeholder="deadbeef1998" />
+      <p>
+        <button type="submit">Отправить!</button>
+    </form>
+    <hr />
+    <form action="/userpic" method="POST" enctype="multipart/form-data">
+      <p>
+        <input name="authToken" placeholder="deadbeef1998" />
+      <p>
+        <input type="file" name="userpic" />
       <p>
         <button type="submit">Отправить!</button>
     </form>
@@ -157,6 +168,30 @@ app.get('/check-publishing-rights', (req, res) => {
 
   db.collection('users').findOne({ token: req.body.authToken }).then(user => {
     res.send({ canPublish: (user && (user.canPublish || user.isAdmin)) || false });
+  });
+});
+
+app.post('/userpic', (req, res) => {
+  console.log("POST /userpic", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user) {
+      res.status(403).send({ status: 'INVALID_AUTH' });
+    }
+    else {
+      const filename = user.email + '.jpg';
+
+      req.files.userpic.mv(path.join(__dirname, 'img', filename));
+
+      db.collection('users').updateOne({ email: user.email }, { $set: { userpicFilename: filename } }).then(result => {
+        if(result) {
+          res.send({status: 'OK' });
+        }
+        else {
+          res.send({status: 'ERROR' });
+        }
+      });
+    }
   });
 });
 
