@@ -114,6 +114,8 @@ let nTotal = null;
 
 const savePageOfEvents = (db, nPage) => {
   return new Promise((resolve, reject) => {
+    // https://docs.kudago.com/api/#page:%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F,header:%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F-%D1%81%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D0%B9
+
     let reqUrl = 'https://kudago.com/public-api/v1.4/events/'
     reqUrl += '?fields=' + ['id', 'title', 'description', 'dates', 'place', 'images'].join(',');
     reqUrl += '&expand=place';
