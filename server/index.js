@@ -210,12 +210,27 @@ app.get('/userpic/:email', (req, res) => {
       if(user.gender === 'Female') {
         userpicFilename = 'default-female.png';
       }
-      else {
+      else if(user.gender === 'Male') {
         userpicFilename = 'default-male.png';
+      }
+      else {
+        userpicFilename = 'default-transgender.png';
       }
     }
 
     res.sendFile(path.join(__dirname, 'img', userpicFilename));
+  });
+});
+
+app.get('/profile/:authToken', (req, res) => {
+  console.log("GET /profile/" + req.params.authToken);
+
+  db.collection('users').findOne({ token: req.params.authToken }).then(user => {
+    delete user._id;
+    delete user.token;
+    delete user.userpicFilename;
+
+    res.send(user);
   });
 });
 
