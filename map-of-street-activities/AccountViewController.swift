@@ -20,7 +20,7 @@ class AccountViewController: UIViewController {
         super.viewDidLoad()
         fetchAuthToken()
         
-        imageView.downloaded(from: "http://placehold.jp/100x100.png")
+        imageView.downloaded(from: "http://vikiwai.local/userpic/" + email!)
     }
     
     func fetchAuthToken() {
@@ -48,7 +48,6 @@ extension UIImageView {
         contentMode = mode
         URLSession.shared.dataTask(with: url) { data, response, error in guard
             let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-            let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
             let data = data, error == nil,
             let image = UIImage(data: data)
             else {

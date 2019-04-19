@@ -11,7 +11,7 @@ import MapKit
 import CoreLocation
 import CoreData
 
-class MapViewController: UIViewController, CLLocationManagerDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var mapView: MKMapView!
 
@@ -60,6 +60,125 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         }
         task.resume()
     }
+    var toolBar = UIToolbar()
+    
+    @IBAction func filterActivities(_ sender: Any) {
+        filtersPicker.delegate = self
+        filtersPicker.backgroundColor = UIColor.white
+        filtersPicker.setValue(UIColor.black, forKey: "textColor")
+        filtersPicker.autoresizingMask = .flexibleWidth
+        filtersPicker.contentMode = .center
+        filtersPicker.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 300)
+        self.view.addSubview(filtersPicker)
+        
+        toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 50))
+        toolBar.barStyle = .default
+        toolBar.items = [UIBarButtonItem.init(title: "Done", style: .done, target: self, action: #selector(onDoneButtonTapped))]
+        self.view.addSubview(toolBar)
+    }
+    
+    var filtersPicker = UIPickerView()
+    var filter: String = ""
+    
+    let myPickerData: Array<String> = ["morning", "day", "evening", "night", "whatever"]
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return myPickerData.count
+    }
+    
+    func pickerView( _ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return myPickerData[row]
+    }
+    
+    func pickerView( _ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        filter = myPickerData[row]
+    }
+    
+    @objc func onDoneButtonTapped() {
+        filtersPicker.removeFromSuperview()
+        toolBar.removeFromSuperview()
+        
+        print(filter)
+        
+        switch filter {
+        case "morning":
+            var searchedActivities: [Activity] = []
+            
+            for result in activities {
+                if result.timeStart > "06:00" && result.timeStart <= "12:00" {
+                    searchedActivities.append(result)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.mapView.removeAnnotations(self.activities)
+                self.mapView.addAnnotations(searchedActivities)
+            }
+        case "day":
+            var searchedActivities: [Activity] = []
+            
+            for result in activities {
+                if result.timeStart > "12:00" && result.timeStart <= "18:00" {
+                    searchedActivities.append(result)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.mapView.removeAnnotations(self.activities)
+                self.mapView.addAnnotations(searchedActivities)
+            }
+        case "evening":
+            var searchedActivities: [Activity] = []
+            
+            for result in activities {
+                if result.timeStart > "19:00" && result.timeStart <= "23:59" {
+                    searchedActivities.append(result)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.mapView.removeAnnotations(self.activities)
+                self.mapView.addAnnotations(searchedActivities)
+            }
+        case "night":
+            var searchedActivities: [Activity] = []
+            
+            for result in activities {
+                if result.timeStart >= "00:00" && result.timeStart <= "06:00" {
+                    searchedActivities.append(result)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.mapView.removeAnnotations(self.activities)
+                self.mapView.addAnnotations(searchedActivities)
+            }
+        default:
+            return
+        }
+    }
+    
+    @IBOutlet weak var searchText: UITextField!
+    
+    
+    @IBAction func searchActivities(_ sender: Any) {
+        var searchedActivities: [Activity] = []
+        
+        for result in activities {
+            if result.titleA.contains(String(searchText!.text!)) || searchText!.text! == "" {
+                searchedActivities.append(result)
+            }
+        }
+        
+        DispatchQueue.main.async {
+            self.mapView.removeAnnotations(self.activities)
+            self.mapView.addAnnotations(searchedActivities)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,6 +199,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
         }
 
         loadInitialData()
+        
+        self.hideKeyboardWhenTappedAround()
     }
     
     override func didReceiveMemoryWarning() {
@@ -102,8 +223,7 @@ extension MapViewController: MKMapViewDelegate {
         var view: MKMarkerAnnotationView
         
         // Check to see if a reusable annotation view is available before creating a new one.
-        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
-            as? MKMarkerAnnotationView {
+        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView {
             dequeuedView.annotation = annotation
             view = dequeuedView
         } else {
