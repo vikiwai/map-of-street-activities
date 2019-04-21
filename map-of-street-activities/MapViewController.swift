@@ -224,27 +224,17 @@ extension MapViewController: MKMapViewDelegate {
         
         // To make markers appear.
         let identifier = "marker"
-        var view: MKMarkerAnnotationView
-        
-        // Check to see if a reusable annotation view is available before creating a new one.
-//        if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView {
-//            dequeuedView.annotation = annotation
-//            view = dequeuedView
-//        } else {
-            // Create a new MKMarkerAnnotationView object, if an annotation view could not be dequeued.
-            view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-            view.canShowCallout = true
-            view.calloutOffset = CGPoint(x: -5, y: 5)
-            view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        let view: MKMarkerAnnotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        view.canShowCallout = true
+        view.calloutOffset = CGPoint(x: -5, y: 5)
+        view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             
-            let detailLabel = UILabel()
-            detailLabel.numberOfLines = 0
-            detailLabel.font = detailLabel.font.withSize(17)
-            detailLabel.text = "Location name: \(annotation.locationName) \nCompany: \(annotation.company) \nDate: \(annotation.date) \nTime start: \(annotation.timeStart) \nDescription: \(annotation.wholeDescription)"
+        let detailLabel = UILabel()
+        detailLabel.numberOfLines = 0
+        detailLabel.font = detailLabel.font.withSize(17)
+        detailLabel.text = "Location name: \(annotation.locationName) \nCompany: \(annotation.company) \nDate: \(annotation.date) \nTime start: \(annotation.timeStart) \nDescription: \(annotation.wholeDescription)"
             view.detailCalloutAccessoryView = detailLabel
 
-//        }
-        
         return view
     }
 }

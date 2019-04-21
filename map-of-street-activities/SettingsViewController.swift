@@ -53,7 +53,6 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
                 
                 let boundary = "vikabunyaevaiosprogrammistshootka"
                 let contentType = String(format: "multipart/form-data; boundary=%@",boundary)
-                //  println("Content Type \(contentType)")
                 request.addValue(contentType, forHTTPHeaderField: "Content-Type")
                 
                 var body = Data()
@@ -80,30 +79,6 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
                     
                     if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
                         print("response: ", utf8Representation)
-                        
-                        let dict = utf8Representation.toJSON() as? [String: String]
-                        
-                        if dict!["status"]! == "OK" {
-                            DispatchQueue.main.async {
-//                                self.save(token: dict!["token"]!, email: self.inputEmailField.text!)
-//
-//                                let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//                                let newViewController = storyBoard.instantiateViewController(withIdentifier: "tarBarController")
-//
-//                                self.present(newViewController, animated: true, completion: nil)
-                            }
-                        }
-                        else {
-                            DispatchQueue.main.async{
-//                                let alertController = UIAlertController(title: "Ooops", message: "Wrong e-mail or password", preferredStyle: .alert)
-//                                let okAction = UIAlertAction(title: "Fix", style: UIAlertAction.Style.default) {
-//                                    UIAlertAction in NSLog("OK")
-//                                }
-//                                alertController.addAction(okAction)
-//
-//                                self.present(alertController, animated: true, completion: nil)
-                            }
-                        }
                     } else {
                         print("No readable data received in response")
                     }
@@ -119,13 +94,11 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
     }
     
     
+    @IBOutlet weak var inputEmailField: UITextField!
     @IBOutlet weak var inputNameCompanyField: UITextField!
-    @IBOutlet weak var inputPhoneNumberField: UITextField!
     
     @IBAction func getRights(_ sender: Any) {
-        fetchAuthToken()
-        /*
-        var request = URLRequest(url: URL(string: "http://vikiwai.local/check-publishing-rights")!)
+        var request = URLRequest(url: URL(string: "http://vikiwai.local/publishing-rights-applications")!)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         
@@ -148,39 +121,24 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
                 
                 if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
                     print("response: ", utf8Representation)
-                    
-                    let dict = utf8Representation.toJSON() as? [String: String]
-                    
-                    if dict!["status"]! == "OK" {
-                        DispatchQueue.main.async {
-                            let alertController = UIAlertController(title: "Complit", message: "Right are requested", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
-                                UIAlertAction in NSLog("OK")
-                            }
-                            alertController.addAction(okAction)
-                            
-                            self.present(alertController, animated: true, completion: nil)
+                    // TODO: Already exist
+                    DispatchQueue.main.async {
+                        let alertController = UIAlertController(title: "Complit", message: "Right are requested", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                            UIAlertAction in NSLog("OK")
                         }
-                    } else {
-                        DispatchQueue.main.async {
-                            let alertController = UIAlertController(title: "Ooops", message: "Something was wrong", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "Retry", style: UIAlertAction.Style.default) {
-                                UIAlertAction in NSLog("OK")
-                            }
-                            alertController.addAction(okAction)
-                            
-                            self.present(alertController, animated: true, completion: nil)
-                        }
+                        alertController.addAction(okAction)
+                        
+                        self.present(alertController, animated: true, completion: nil)
                     }
                 } else {
-                    print("No readable data received in response")
+                    print("Error")
                 }
             }
             task.resume()
         } catch {
             print("Something was wrong")
         }
-        */
     }
     
     @IBAction func logOut(_ sender: Any) {
