@@ -229,7 +229,6 @@ app.post('/activities', (req, res) => {
           wholeDescription: req.body.description,
           date: req.body.date,
           timeStart: req.body.timeStart,
-          durationHours: parseFloat(req.body.durationHours),
           creatorEmail: user.email
       }).then(result => {
         res.send({ status: "OK" });

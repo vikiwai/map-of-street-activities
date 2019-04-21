@@ -39,7 +39,7 @@ class CreatorViewController: UIViewController {
             "description": inputDescriptionField.text!,
             "date": inputDateField.text!,
             "timeStart": inputStartTimeField.text!,
-            "durationHours": inputDurationField.text!,
+            "categories": inputDurationField.text!,
             "authToken": token!,
         ]
         

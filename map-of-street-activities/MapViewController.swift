@@ -70,22 +70,42 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
         filtersPicker.setValue(UIColor.black, forKey: "textColor")
         filtersPicker.autoresizingMask = .flexibleWidth
         filtersPicker.contentMode = .center
-        filtersPicker.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 300)
+        filtersPicker.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 280, width: UIScreen.main.bounds.size.width, height: 186)
         self.view.addSubview(filtersPicker)
         
-        segmentedControl = UISegmentedControl.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 40))
+        segmentedControl.frame = CGRect(x: 0.0, y: UIScreen.main.bounds.size.height - 310, width: UIScreen.main.bounds.size.width, height: 30)
+        segmentedControl.backgroundColor = UIColor.white
+        segmentedControl.addTarget(self, action: #selector(chooseFilters), for: .valueChanged)
         self.view.addSubview(segmentedControl)
         
-        toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 50))
+        toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 94, width: UIScreen.main.bounds.size.width, height: 45))
         toolBar.barStyle = .default
-        toolBar.items = [UIBarButtonItem.init(title: "Done", style: .done, target: self, action: #selector(onDoneButtonTapped))]
+        toolBar.items = [UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil), UIBarButtonItem.init(title: "Done", style: .done, target: self, action: #selector(onDoneButtonTapped)), UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)]
         self.view.addSubview(toolBar)
+    }
+    
+    @objc func chooseFilters(sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            myPickerData = ["morning", "day", "evening", "night", "whatever"]
+            filtersPicker.reloadAllComponents()
+            segmentedControl.selectedSegmentIndex = 0
+        case 1:
+            myPickerData = ["ball", "business events", "cinema", "circus", "comedy-club", "concert", "dance trainings", "education", "evening", "exhibition",
+                            "fashion", "festival", "flashmob", "games", "global", "holiday", "kids", "kvn", "magic", "masquerade", "meeting", "night",
+                            "open", "other", "party", "permanent exhibitions", "photo", "presentation", "quest", "show", "social activity", "speed-dating",
+                            "sport", "stand-up", "theater", "tour"]
+            filtersPicker.reloadAllComponents()
+            segmentedControl.selectedSegmentIndex = 1
+        default:
+            break
+        }
     }
     
     var filtersPicker = UIPickerView()
     var filter: String = ""
     
-    let myPickerData: Array<String> = ["morning", "day", "evening", "night", "whatever"]
+    var myPickerData: Array<String> = []
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -106,6 +126,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
     @objc func onDoneButtonTapped() {
         filtersPicker.removeFromSuperview()
         toolBar.removeFromSuperview()
+        segmentedControl.removeFromSuperview()
         
         print(filter)
         
@@ -163,7 +184,21 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
                 self.mapView.addAnnotations(searchedActivities)
             }
         default:
-            return
+            var searchedActivities: [Activity] = []
+            
+            for result in activities {
+                for category in result.categories {
+                    if filter == category {
+                        searchedActivities.append(result)
+                        break
+                    }
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.mapView.removeAnnotations(self.activities)
+                self.mapView.addAnnotations(searchedActivities)
+            }
         }
     }
     

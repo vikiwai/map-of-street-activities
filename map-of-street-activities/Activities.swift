@@ -18,14 +18,14 @@ class Activity: NSObject, MKAnnotation, Decodable {
     let wholeDescription: String
     let date: String
     let timeStart: String
-    let durationHours: Double
     let creatorEmail: String
+    let categories: Array<String>
 
     lazy var coordinate : CLLocationCoordinate2D = {
         return CLLocationCoordinate2D(latitude: Double(coordsLat), longitude: Double(coordsLon))
     }()
     
-    init(titleA: String, locationName: String, coordsLat: Float, coordsLon: Float, company: String, wholeDescription: String, date: String, timeStart: String, durationHours: Double, creatorEmail: String) {
+    init(titleA: String, locationName: String, coordsLat: Float, coordsLon: Float, company: String, wholeDescription: String, date: String, timeStart: String, creatorEmail: String, categories: Array<String>) {
         self.titleA = titleA
         self.locationName = locationName
         self.coordsLat = coordsLat
@@ -34,8 +34,8 @@ class Activity: NSObject, MKAnnotation, Decodable {
         self.wholeDescription = wholeDescription
         self.date = date
         self.timeStart = timeStart
-        self.durationHours = durationHours
         self.creatorEmail = creatorEmail
+        self.categories = categories
         
         super.init()
     }

@@ -75,8 +75,6 @@ const saveAnEvent = (db, eventInfo) => {
     let [startDate, startTime] = date.start.toISOString().split('T');
     startTime = startTime.substr(0, startTime.lastIndexOf(':'));
 
-    const durationHours = (date.end - date.start) / 3600 / 1000;
-
     const activityRecord = {
       titleA: eventInfo.title,
       locationName: eventInfo.place.address,
@@ -87,7 +85,6 @@ const saveAnEvent = (db, eventInfo) => {
       wholeDescription: eventInfo.description.replace("<p>", "").replace("</p>", ""),
       date: startDate,
       timeStart: startTime,
-      durationHours: durationHours,
       creatorEmail: 'kudago',
       kudagoId: eventInfo.id
     };
