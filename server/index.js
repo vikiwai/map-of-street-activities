@@ -129,6 +129,19 @@ app.get('/', (req, res) => {
       <p>
         <button type="submit">Отправить!</button>
     </form>
+    <hr />
+    <form action="/publishing-rights" method="POST">
+      <p>
+        Права публикации:
+      <p>
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
+      <p>
+        <input name="email" placeholder="ebich@govno.com" />
+      <p>
+        <label><input type="checkbox" name="canPublish" /> canPublish</label>
+      <p>
+        <button type="submit">Отправить!</button>
+    </form>
     `);
 });
 
@@ -333,6 +346,34 @@ app.get('/publishing-rights-applications', (req, res) => {
       res.send(applications.map(application => application.email));
     }
   })
+});
+
+app.post('/publishing-rights', (req, res) => {
+  console.log("POST /publishing-rights:", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user) {
+      res.status(403).send({ status: 'INVALID_AUTH' });
+      return;
+    }
+    else if(!user.isAdmin) {
+      res.status(403).send({ status: 'NOT_AN_ADMIN' });
+      return;
+    }
+
+    const newCanPublish = req.body.canPublish ? true : false;
+
+    db.collection('applications').updateOne({ email: req.body.email }, { $set: { isOpen: false } }).then(result => {
+      db.collection('users').updateOne({ email: req.body.email }, { $set: { canPublish: newCanPublish } }).then(result => {
+        if(result) {
+          res.send({ status: 'OK' });
+        }
+        else {
+          res.send({ status: 'ERROR' });
+        }
+      });
+    });
+  });
 });
 
 const loadData = require('./loadData');
