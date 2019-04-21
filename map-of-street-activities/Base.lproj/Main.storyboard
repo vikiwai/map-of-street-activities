@@ -690,6 +690,10 @@
                                 <rect key="frame" x="9" y="252" width="303" height="256"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="64c-zm-uIH" id="SMo-qJ-82G"/>
+                                    <outlet property="delegate" destination="64c-zm-uIH" id="vH5-Hy-8TY"/>
+                                </connections>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Favourites" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Uo-Ed-xix">
                                 <rect key="frame" x="9" y="221" width="303" height="28"/>

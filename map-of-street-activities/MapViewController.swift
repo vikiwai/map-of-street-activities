@@ -13,6 +13,9 @@ import CoreData
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    var token: String?
+    var email: String?
+    
     @IBOutlet weak var mapView: MKMapView!
 
     var activities: [Activity] = []
@@ -247,6 +250,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    func fetchAuthToken() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
+        
+        do {
+            let result = try managedContext.fetch(fetchRequest)
+            for data in result as! [NSManagedObject] {
+                token = (data.value(forKey: "token") as! String)
+                email = (data.value(forKey: "email") as! String)
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+    }
 }
 
 extension MapViewController: MKMapViewDelegate {
@@ -264,14 +286,79 @@ extension MapViewController: MKMapViewDelegate {
         let view: MKMarkerAnnotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         view.canShowCallout = true
         view.calloutOffset = CGPoint(x: -5, y: 5)
-        view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-            
+        /*
+        let starImage = UIImage(named: "star-7")
+        let starButton = UIButton()
+        starButton.setImage(starImage, for: .normal)
+        view.rightCalloutAccessoryView = starButton
+        */
+        view.rightCalloutAccessoryView = UIButton(type: .contactAdd)
+        
+        /*
+        let starButton = UIButton(type: UIButton.ButtonType.custom)
+        starButton.setImage(UIImage(named: "star-7"), for: .normal)
+        starButton.setImage(UIImage(named: "star-7"), for: .highlighted)
+        view.rightCalloutAccessoryView = starButton
+        */
+        
         let detailLabel = UILabel()
         detailLabel.numberOfLines = 0
         detailLabel.font = detailLabel.font.withSize(17)
         detailLabel.text = "Location name: \(annotation.locationName) \nCompany: \(annotation.company) \nDate: \(annotation.date) \nTime start: \(annotation.timeStart) \nDescription: \(annotation.wholeDescription)"
-            view.detailCalloutAccessoryView = detailLabel
+        view.detailCalloutAccessoryView = detailLabel
 
         return view
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        let activity = view.annotation as! Activity
+        let idToFavourites = activity.id
+        
+        fetchAuthToken()
+        
+        var request = URLRequest(url: URL(string: "http://vikiwai.local/favourites/" + email!)!)
+        
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        print("RRRRRRRR")
+        print(token!)
+        print(email!)
+        print(idToFavourites)
+        
+        let params: [String: String] = [
+            "authToken": token!,
+            "id": idToFavourites
+        ]
+        
+        let encoder = JSONEncoder()
+        
+        do {
+            request.httpBody = try encoder.encode(params)
+            
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            let task = session.dataTask(with: request) { (responseData, response, responseError) in
+                guard responseError == nil else {
+                    print(responseError as Any)
+                    return
+                }
+                
+                if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
+                    print("response: ", utf8Representation)
+                    let dict = utf8Representation.toJSON() as? [String: String]
+                    if dict!["status"]! == "OK" {
+                        DispatchQueue.main.async{
+                            print("DONE")
+                        }
+                    }
+                } else {
+                    print("No readable data received in response")
+                }
+            }
+            task.resume()
+        } catch {
+            print("Something was wrong")
+        }
     }
 }

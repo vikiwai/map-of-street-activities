@@ -20,12 +20,13 @@ class Activity: NSObject, MKAnnotation, Decodable {
     let timeStart: String
     let creatorEmail: String
     let categories: Array<String>
+    let id: String
 
     lazy var coordinate : CLLocationCoordinate2D = {
         return CLLocationCoordinate2D(latitude: Double(coordsLat), longitude: Double(coordsLon))
     }()
     
-    init(titleA: String, locationName: String, coordsLat: Float, coordsLon: Float, company: String, wholeDescription: String, date: String, timeStart: String, creatorEmail: String, categories: Array<String>) {
+    init(titleA: String, locationName: String, coordsLat: Float, coordsLon: Float, company: String, wholeDescription: String, date: String, timeStart: String, creatorEmail: String, categories: Array<String>, id: String) {
         self.titleA = titleA
         self.locationName = locationName
         self.coordsLat = coordsLat
@@ -36,6 +37,7 @@ class Activity: NSObject, MKAnnotation, Decodable {
         self.timeStart = timeStart
         self.creatorEmail = creatorEmail
         self.categories = categories
+        self.id = id
         
         super.init()
     }
