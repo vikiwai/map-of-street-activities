@@ -142,6 +142,15 @@ app.get('/', (req, res) => {
       <p>
         <button type="submit">Отправить!</button>
     </form>
+    <hr />
+    <form action="/favourites/q" method="POST">
+      <p>
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
+      <p>
+        <input name="id" placeholder="5cb914088f049745521bbf70" />
+      <p>
+        <button type="submit">Отправить!</button>
+    </form>
     `);
 });
 
@@ -156,6 +165,7 @@ app.post('/users', (req, res) => {
       const authToken = uuidv4();
 
       const newUser = Object.assign({}, req.body, {
+        favouriteIds: [],
         token: authToken,
         canPublish: false,
         isAdmin: req.body.isAdmin ? true : false
@@ -199,7 +209,7 @@ app.get('/activities', (req, res) => {
       res.send([]);
     }
     else {
-      res.send(activities.map(activity => Object.assign(activity, { _id: undefined })));
+      res.send(activities.map(activity => Object.assign({}, activity, { _id: undefined, id: activity._id })));
     }
   });
 });
@@ -373,6 +383,55 @@ app.post('/publishing-rights', (req, res) => {
         }
       });
     });
+  });
+});
+
+app.get('/favourites/:email', (req, res) => {
+  console.log("GET /favourites/" + req.params.email);
+
+  db.collection('users').findOne({ email: req.params.email }).then(user => {
+    if(user) {
+      res.send(user.favouriteIds || []);
+    }
+    else {
+      res.status(404).send("User not found");
+    }
+  });
+});
+
+app.post('/favourites/:email', (req, res) => {
+  console.log("POST /favourites/" + req.params.email + ":", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user || user.email !== req.params.email) {
+      res.send({ status: "INVALID_AUTH" });
+    }
+    else {
+      db.collection('users').updateOne(
+        { email: req.params.email },
+        { $addToSet: { favouriteIds: req.body.id } }
+      ).then(result => {
+        res.send({ status: "OK" });
+      });
+    }
+  });
+});
+
+app.delete('/favourites/:email', (req, res) => {
+  console.log("DELETE /favourites/" + req.params.email + ":", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user || user.email !== req.params.email) {
+      res.send({ status: "INVALID_AUTH" });
+    }
+    else {
+      db.collection('users').updateOne(
+        { email: req.params.email },
+        { $pull: { favouriteIds: req.body.id } }
+      ).then(result => {
+        res.send({ status: "OK" });
+      });
+    }
   });
 });
 
