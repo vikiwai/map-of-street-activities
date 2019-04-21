@@ -11,6 +11,9 @@
 		5B61DE3B225BCF650005A331 /* CreatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B61DE3A225BCF650005A331 /* CreatorViewController.swift */; };
 		5B61DE3D225BCF7F0005A331 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B61DE3C225BCF7F0005A331 /* AccountViewController.swift */; };
 		5B61DE3F225BCFA30005A331 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B61DE3E225BCFA30005A331 /* SettingsViewController.swift */; };
+		5B837B00226BEF380035203D /* AdminViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B837AFF226BEF380035203D /* AdminViewController.swift */; };
+		5B837B02226BF6FA0035203D /* RightApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B837B01226BF6FA0035203D /* RightApplication.swift */; };
+		5B837B04226BFCE50035203D /* NewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B837B03226BFCE50035203D /* NewTableViewCell.swift */; };
 		5BC90FF92269A0C200001E5B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC90FF82269A0C100001E5B /* Profile.swift */; };
 		5BD379DD2261743C006FA433 /* Activities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BD379DC2261743C006FA433 /* Activities.swift */; };
 		5BEF530C225A8FD000C79D21 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BEF530B225A8FD000C79D21 /* AppDelegate.swift */; };
@@ -46,6 +49,9 @@
 		5B61DE3A225BCF650005A331 /* CreatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatorViewController.swift; sourceTree = "<group>"; };
 		5B61DE3C225BCF7F0005A331 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
 		5B61DE3E225BCFA30005A331 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		5B837AFF226BEF380035203D /* AdminViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminViewController.swift; sourceTree = "<group>"; };
+		5B837B01226BF6FA0035203D /* RightApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RightApplication.swift; sourceTree = "<group>"; };
+		5B837B03226BFCE50035203D /* NewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTableViewCell.swift; sourceTree = "<group>"; };
 		5BC90FF82269A0C100001E5B /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		5BD379DC2261743C006FA433 /* Activities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Activities.swift; sourceTree = "<group>"; };
 		5BEF5308225A8FD000C79D21 /* map-of-street-activities.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "map-of-street-activities.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,6 +133,9 @@
 				5B61DE3E225BCFA30005A331 /* SettingsViewController.swift */,
 				5BD379DC2261743C006FA433 /* Activities.swift */,
 				5BC90FF82269A0C100001E5B /* Profile.swift */,
+				5B837AFF226BEF380035203D /* AdminViewController.swift */,
+				5B837B01226BF6FA0035203D /* RightApplication.swift */,
+				5B837B03226BFCE50035203D /* NewTableViewCell.swift */,
 			);
 			path = "map-of-street-activities";
 			sourceTree = "<group>";
@@ -280,11 +289,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B837B00226BEF380035203D /* AdminViewController.swift in Sources */,
 				5BEF530E225A8FD000C79D21 /* ViewController.swift in Sources */,
 				5BC90FF92269A0C200001E5B /* Profile.swift in Sources */,
+				5B837B02226BF6FA0035203D /* RightApplication.swift in Sources */,
 				5B61DE3B225BCF650005A331 /* CreatorViewController.swift in Sources */,
 				5B61DE3D225BCF7F0005A331 /* AccountViewController.swift in Sources */,
 				5BEF530C225A8FD000C79D21 /* AppDelegate.swift in Sources */,
+				5B837B04226BFCE50035203D /* NewTableViewCell.swift in Sources */,
 				5BEF533D225AC9BA00C79D21 /* RegistrationViewController.swift in Sources */,
 				5BD379DD2261743C006FA433 /* Activities.swift in Sources */,
 				5B61DE39225BC6170005A331 /* MapViewController.swift in Sources */,

@@ -10,7 +10,8 @@ import UIKit
 import CoreData
 
 class SettingsViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-
+    var authToken: NSManagedObject?
+    
     var token: String?
     var email: String?
     
@@ -122,6 +123,64 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
     @IBOutlet weak var inputPhoneNumberField: UITextField!
     
     @IBAction func getRights(_ sender: Any) {
+        fetchAuthToken()
+        /*
+        var request = URLRequest(url: URL(string: "http://vikiwai.local/check-publishing-rights")!)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        let params: [String: String] = [
+            "authToken": token!
+        ]
+        
+        let encoder = JSONEncoder()
+        
+        do {
+            request.httpBody = try encoder.encode(params)
+            
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            let task = session.dataTask(with: request) {
+                (responseData, response, responseError) in guard responseError == nil else {
+                    print(responseError as Any)
+                    return
+                }
+                
+                if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
+                    print("response: ", utf8Representation)
+                    
+                    let dict = utf8Representation.toJSON() as? [String: String]
+                    
+                    if dict!["status"]! == "OK" {
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Complit", message: "Right are requested", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
+                            
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Ooops", message: "Something was wrong", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Retry", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
+                            
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    }
+                } else {
+                    print("No readable data received in response")
+                }
+            }
+            task.resume()
+        } catch {
+            print("Something was wrong")
+        }
+        */
     }
     
     @IBAction func logOut(_ sender: Any) {
@@ -154,6 +213,8 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
+        fetchAuthToken()
     }
     
     override func didReceiveMemoryWarning() {

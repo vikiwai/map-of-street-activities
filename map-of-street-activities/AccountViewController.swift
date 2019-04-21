@@ -21,7 +21,7 @@ class AccountViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchAuthToken()
-        
+        self.hideKeyboardWhenTappedAround()
         imageView.downloaded(from: "http://vikiwai.local/userpic/" + email!)
         
         

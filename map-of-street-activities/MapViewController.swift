@@ -33,6 +33,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
     }
     
     func loadInitialData() {
+        //locationManager.stopUpdatingLocation()
+        
         let request = URLRequest(url: URL(string: "http://vikiwai.local/activities")!)
         print("request: ", request as Any)
         let session = URLSession(configuration: .default)
@@ -195,6 +197,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
+            
         } else {
             print("Turn on location services or GPS")
         }

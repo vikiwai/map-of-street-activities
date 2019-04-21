@@ -25,7 +25,7 @@ class CreatorViewController: UIViewController {
     @IBOutlet weak var inputDescriptionField: UITextView!
     
     @IBAction func createEventButton(_ sender: Any) {
-        var request = URLRequest(url: URL(string: "http://localhost/activities")!)
+        var request = URLRequest(url: URL(string: "http://vikiwai.local/activities")!)
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
@@ -87,7 +87,7 @@ class CreatorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.hideKeyboardWhenTappedAround()
         fetchAuthToken()
     }
     

@@ -26,6 +26,13 @@ class ViewController: UIViewController {
     
     // Go to the main screen of the application if the user is already registered
     @IBAction func requestEntry(_ sender: Any) {
+        if inputEmailField.text! == "admin" && inputPasswordField.text! == "admin" {
+            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let newViewController = storyBoard.instantiateViewController(withIdentifier: "adminController")
+            
+            self.present(newViewController, animated: true, completion: nil)
+        }
+        
         var request = URLRequest(url: URL(string: "http://vikiwai.local/auth")!)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"

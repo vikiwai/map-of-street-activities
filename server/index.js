@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
           <option>Huilo</option>
         </select>
       <p>
-        <input name="email" placeholder="ebich@govno.com" />
+        <input name="email" placeholder="@.com" />
       <p>
         <input type="password" name="password" placeholder="Пароль" />
       <p>
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
     <hr />
     <form action="/auth" method="POST">
       <p>
-        <input name="email" placeholder="ebich@govno.com" />
+        <input name="email" placeholder="@.com" />
       <p>
         <input type="password" name="password" placeholder="Пароль" />
       <p>
