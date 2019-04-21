@@ -39,8 +39,7 @@ const kudagoCats = [
   'sport',
   'stand-up',
   'theater',
-  'tour',
-  'yarmarki-razvlecheniya-yarmarki'
+  'tour'
 ];
 
 const selectDate = eventDates => {
@@ -84,6 +83,7 @@ const saveAnEvent = (db, eventInfo) => {
       coordsLat: eventInfo.place.coords.lat,
       coordsLon: eventInfo.place.coords.lon,
       company: eventInfo.place.title,
+      categories: eventInfo.categories,
       wholeDescription: eventInfo.description.replace("<p>", "").replace("</p>", ""),
       date: startDate,
       timeStart: startTime,
@@ -117,7 +117,7 @@ const savePageOfEvents = (db, nPage) => {
     // https://docs.kudago.com/api/#page:%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F,header:%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F-%D1%81%D0%BF%D0%B8%D1%81%D0%BE%D0%BA-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D0%B9
 
     let reqUrl = 'https://kudago.com/public-api/v1.4/events/'
-    reqUrl += '?fields=' + ['id', 'title', 'description', 'dates', 'place', 'images'].join(',');
+    reqUrl += '?fields=' + ['id', 'title', 'description', 'dates', 'place', 'categories', 'images'].join(',');
     reqUrl += '&expand=place';
     reqUrl += '&page_size=100';
     reqUrl += '&page='+ nPage;

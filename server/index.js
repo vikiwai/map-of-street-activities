@@ -35,6 +35,8 @@ app.get('/', (req, res) => {
       <p>
         <input type="password" name="password" placeholder="Пароль" />
       <p>
+        <label><input type="checkbox" name="isAdmin"/> isAdmin</label>
+      <p>
         <button type="submit">Отправить!</button>
     </form>
     <hr />
@@ -58,6 +60,45 @@ app.get('/', (req, res) => {
       <p>
         <input name="company" placeholder="ООО «Розетка-кофе»" />
       <p>
+        <select multiple name="categories">
+          <option>ball</option>
+          <option>business-events</option>
+          <option>cinema</option>
+          <option>circus</option>
+          <option>comedy-club</option>
+          <option>concert</option>
+          <option>dance-trainings</option>
+          <option>education</option>
+          <option>evening</option>
+          <option>exhibition</option>
+          <option>fashion</option>
+          <option>festival</option>
+          <option>flashmob</option>
+          <option>games</option>
+          <option>global</option>
+          <option>holiday</option>
+          <option>kids</option>
+          <option>kvn</option>
+          <option>magic</option>
+          <option>masquerade</option>
+          <option>meeting</option>
+          <option>night</option>
+          <option>open</option>
+          <option>other</option>
+          <option>party</option>
+          <option>permanent-exhibitions</option>
+          <option>photo</option>
+          <option>presentation</option>
+          <option>quest</option>
+          <option>show</option>
+          <option>social-activity</option>
+          <option>speed-dating</option>
+          <option>sport</option>
+          <option>stand-up</option>
+          <option>theater</option>
+          <option>tour</option>
+        </select>
+      <p>
         <textarea name="description"></textarea>
       <p>
         <input name="date" placeholder="2018-01-18" />
@@ -66,16 +107,38 @@ app.get('/', (req, res) => {
       <p>
         <input name="durationHours" placeholder="4.5" />
       <p>
-        <input name="authToken" placeholder="deadbeef1998" />
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
       <p>
         <button type="submit">Отправить!</button>
     </form>
     <hr />
     <form action="/userpic" method="POST" enctype="multipart/form-data">
       <p>
-        <input name="authToken" placeholder="deadbeef1998" />
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
       <p>
         <input type="file" name="userpic" />
+      <p>
+        <button type="submit">Отправить!</button>
+    </form>
+    <hr />
+    <form action="/publishing-rights-applications" method="POST">
+      <p>
+        Заявка на права публикации:
+      <p>
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
+      <p>
+        <button type="submit">Отправить!</button>
+    </form>
+    <hr />
+    <form action="/publishing-rights" method="POST">
+      <p>
+        Права публикации:
+      <p>
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
+      <p>
+        <input name="email" placeholder="ebich@govno.com" />
+      <p>
+        <label><input type="checkbox" name="canPublish" /> canPublish</label>
       <p>
         <button type="submit">Отправить!</button>
     </form>
@@ -92,7 +155,13 @@ app.post('/users', (req, res) => {
     else {
       const authToken = uuidv4();
 
-      db.collection('users').insertOne(Object.assign({}, req.body, { token: authToken, canPublish: false }));
+      const newUser = Object.assign({}, req.body, {
+        token: authToken,
+        canPublish: false,
+        isAdmin: req.body.isAdmin ? true : false
+      });
+
+      db.collection('users').insertOne(newUser);
 
       res.send({ status: "OK", token: authToken });
     }
@@ -146,6 +215,7 @@ app.post('/activities', (req, res) => {
           coordsLat: parseFloat(req.body.coordsLat),
           coordsLon: parseFloat(req.body.coordsLon),
           company: req.body.company,
+          categories: req.body.categories,
           wholeDescription: req.body.description,
           date: req.body.date,
           timeStart: req.body.timeStart,
@@ -231,6 +301,78 @@ app.get('/profile/:authToken', (req, res) => {
     delete user.userpicFilename;
 
     res.send(user);
+  });
+});
+
+app.post('/publishing-rights-applications', (req, res) => {
+  console.log("POST /publishing-rights-applications:", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user) {
+      res.status(403).send({ status: 'INVALID_AUTH' });
+      return;
+    }
+
+    db.collection('applications').findOne({ email: user.email }).then(application => {
+      if(application) {
+        res.status(400).send({ status: 'ALREADY_APPLIED' });
+        return;
+      }
+
+      const newApplication = {
+        email: user.email,
+        isOpen: true
+      };
+
+      db.collection('applications').insertOne(newApplication).then(result => {
+        if(result) {
+          res.send({ status: 'OK' });
+        }
+        else {
+          res.send({ status: 'ERROR' });
+        }
+      });
+    });
+  });
+});
+
+app.get('/publishing-rights-applications', (req, res) => {
+  db.collection('applications').find({ isOpen: true }).toArray((err, applications) => {
+    if(err) {
+      console.log(err);
+      res.send([]);
+    }
+    else {
+      res.send(applications.map(application => application.email));
+    }
+  })
+});
+
+app.post('/publishing-rights', (req, res) => {
+  console.log("POST /publishing-rights:", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user) {
+      res.status(403).send({ status: 'INVALID_AUTH' });
+      return;
+    }
+    else if(!user.isAdmin) {
+      res.status(403).send({ status: 'NOT_AN_ADMIN' });
+      return;
+    }
+
+    const newCanPublish = req.body.canPublish ? true : false;
+
+    db.collection('applications').updateOne({ email: req.body.email }, { $set: { isOpen: false } }).then(result => {
+      db.collection('users').updateOne({ email: req.body.email }, { $set: { canPublish: newCanPublish } }).then(result => {
+        if(result) {
+          res.send({ status: 'OK' });
+        }
+        else {
+          res.send({ status: 'ERROR' });
+        }
+      });
+    });
   });
 });
 
