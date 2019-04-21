@@ -323,6 +323,18 @@ app.post('/publishing-rights-applications', (req, res) => {
   });
 });
 
+app.get('/publishing-rights-applications', (req, res) => {
+  db.collection('applications').find({ isOpen: true }).toArray((err, applications) => {
+    if(err) {
+      console.log(err);
+      res.send([]);
+    }
+    else {
+      res.send(applications.map(application => application.email));
+    }
+  })
+});
+
 const loadData = require('./loadData');
 
 MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
