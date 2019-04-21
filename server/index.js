@@ -142,6 +142,15 @@ app.get('/', (req, res) => {
       <p>
         <button type="submit">Отправить!</button>
     </form>
+    <hr />
+    <form action="/favourites/q" method="POST">
+      <p>
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
+      <p>
+        <input name="id" placeholder="5cb914088f049745521bbf70" />
+      <p>
+        <button type="submit">Отправить!</button>
+    </form>
     `);
 });
 
@@ -388,6 +397,28 @@ app.get('/favourites/:email', (req, res) => {
       res.status(404).send("User not found");
     }
   });
+});
+
+app.post('/favourites/:email', (req, res) => {
+  console.log("POST /favourites/" + req.params.email + ":", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user || user.email !== req.params.email) {
+      res.send({ status: "INVALID_AUTH" });
+    }
+    else {
+      db.collection('users').updateOne(
+        { email: req.params.email },
+        { $addToSet: { favouriteIds: req.body.id } }
+      ).then(result => {
+        res.send({ status: "OK" });
+      });
+    }
+  });
+});
+
+app.delete('/favourites/:email', (req, res) => {
+  // ...
 });
 
 const loadData = require('./loadData');
