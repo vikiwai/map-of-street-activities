@@ -18,6 +18,8 @@ class AccountViewController: UIViewController {
     
     @IBOutlet weak var textView: UITextView!
     
+    var favourites: Array<String> = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchAuthToken()
@@ -97,6 +99,75 @@ extension UIImageView {
             return
         }
         downloaded(from: url, contentMode: mode)
+    }
+}
+
+extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return favourites.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? NewTableViewCell
+        cell?.information.text = favourites[indexPath.row]
+        cell?.cellDelegate = self
+        cell?.index = indexPath
+        return cell!
+    }
+}
+
+extension AccountViewController: TableViewCellFavorites {
+    func onClickCell(index: Int, answer: Bool) {
+        var request = URLRequest(url: URL(string: "http://vikiwai.local/publishing-rights")!)
+        
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        var params: [String: String] = [:]
+        
+        if answer {
+            params = [
+                "authToken": token!,
+                "email": applications[index],
+                "canPublish": "true"
+            ]
+        } else {
+            params = [
+                "authToken": token!,
+                "email": applications[index],
+                "canPublish": "false"
+            ]
+        }
+        
+        let encoder = JSONEncoder()
+        
+        do {
+            request.httpBody = try encoder.encode(params)
+            
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            let task = session.dataTask(with: request) { (responseData, response, responseError) in
+                guard responseError == nil else {
+                    print(responseError as Any)
+                    return
+                }
+                
+                if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
+                    print("response: ", utf8Representation)
+                    let dict = utf8Representation.toJSON() as? [String: String]
+                    if dict!["status"]! == "OK" {
+                        DispatchQueue.main.async{
+                            print("DONE")
+                        }
+                    }
+                } else {
+                    print("No readable data received in response")
+                }
+            }
+            task.resume()
+        } catch {
+            print("Something was wrong")
+        }
     }
 }
 

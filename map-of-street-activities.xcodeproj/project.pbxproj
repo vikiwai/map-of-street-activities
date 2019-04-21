@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B1ADABE226D29860088D89E /* GetTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADABD226D29860088D89E /* GetTableViewCell.swift */; };
 		5B61DE39225BC6170005A331 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B61DE38225BC6170005A331 /* MapViewController.swift */; };
 		5B61DE3B225BCF650005A331 /* CreatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B61DE3A225BCF650005A331 /* CreatorViewController.swift */; };
 		5B61DE3D225BCF7F0005A331 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B61DE3C225BCF7F0005A331 /* AccountViewController.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5B1ADABD226D29860088D89E /* GetTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetTableViewCell.swift; sourceTree = "<group>"; };
 		5B61DE38225BC6170005A331 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		5B61DE3A225BCF650005A331 /* CreatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatorViewController.swift; sourceTree = "<group>"; };
 		5B61DE3C225BCF7F0005A331 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				5BC90FF82269A0C100001E5B /* Profile.swift */,
 				5B837AFF226BEF380035203D /* AdminViewController.swift */,
 				5B837B03226BFCE50035203D /* NewTableViewCell.swift */,
+				5B1ADABD226D29860088D89E /* GetTableViewCell.swift */,
 			);
 			path = "map-of-street-activities";
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 				5BEF533D225AC9BA00C79D21 /* RegistrationViewController.swift in Sources */,
 				5BD379DD2261743C006FA433 /* Activities.swift in Sources */,
 				5B61DE39225BC6170005A331 /* MapViewController.swift in Sources */,
+				5B1ADABE226D29860088D89E /* GetTableViewCell.swift in Sources */,
 				5BEF5314225A8FD000C79D21 /* map_of_street_activities.xcdatamodeld in Sources */,
 				5B61DE3F225BCFA30005A331 /* SettingsViewController.swift in Sources */,
 			);
