@@ -156,6 +156,7 @@ app.post('/users', (req, res) => {
       const authToken = uuidv4();
 
       const newUser = Object.assign({}, req.body, {
+        favouriteIds: [],
         token: authToken,
         canPublish: false,
         isAdmin: req.body.isAdmin ? true : false
@@ -373,6 +374,19 @@ app.post('/publishing-rights', (req, res) => {
         }
       });
     });
+  });
+});
+
+app.get('/favourites/:email', (req, res) => {
+  console.log("GET /favourites/" + req.params.email);
+
+  db.collection('users').findOne({ email: req.params.email }).then(user => {
+    if(user) {
+      res.send(user.favouriteIds || []);
+    }
+    else {
+      res.status(404).send("User not found");
+    }
   });
 });
 
