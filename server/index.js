@@ -6,7 +6,7 @@ const fileUpload = require('express-fileupload');
 
 const uuidv4 = require('uuid/v4');
 
-const MongoClient = require('mongodb').MongoClient
+const mongodb = require('mongodb');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -390,7 +390,29 @@ app.get('/favourites/:email', (req, res) => {
 
   db.collection('users').findOne({ email: req.params.email }).then(user => {
     if(user) {
-      res.send(user.favouriteIds || []);
+      const favouriteIds =( user.favouriteIds || []).map(id => mongodb.ObjectId(id));
+
+      db.collection('activities').find({ _id : { $in : favouriteIds } }).toArray((err, activities) => {
+        if(!activities) {
+          if(err) {
+            console.log(err);
+          }
+
+          res.send([]);
+          return;
+        }
+
+        const favActivities = activities.map(activity => {
+          const newActivity = Object.assign({}, activity);
+
+          newActivity.id = newActivity._id;
+          delete newActivity._id;
+
+          return newActivity;
+        });
+
+        res.send(favActivities);
+      });
     }
     else {
       res.status(404).send("User not found");
@@ -436,7 +458,7 @@ app.delete('/favourites/:email', (req, res) => {
 
 const loadData = require('./loadData');
 
-MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
+mongodb.MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
   if(err) {
     throw err;
   }
@@ -447,8 +469,8 @@ MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }
 
   console.log(`Will listen on port ${port}...`)
 
-  setTimeout(async() => loadData(db), 1);
-  //setInterval(async() => loadData(db), 10 * 60 * 1000);
+  // setTimeout(async() => loadData(db), 1);
+  setInterval(async() => loadData(db), 10 * 60 * 1000);
 
   app.listen(port);
 });
