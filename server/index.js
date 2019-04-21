@@ -58,6 +58,45 @@ app.get('/', (req, res) => {
       <p>
         <input name="company" placeholder="ООО «Розетка-кофе»" />
       <p>
+        <select multiple name="categories">
+          <option>ball</option>
+          <option>business-events</option>
+          <option>cinema</option>
+          <option>circus</option>
+          <option>comedy-club</option>
+          <option>concert</option>
+          <option>dance-trainings</option>
+          <option>education</option>
+          <option>evening</option>
+          <option>exhibition</option>
+          <option>fashion</option>
+          <option>festival</option>
+          <option>flashmob</option>
+          <option>games</option>
+          <option>global</option>
+          <option>holiday</option>
+          <option>kids</option>
+          <option>kvn</option>
+          <option>magic</option>
+          <option>masquerade</option>
+          <option>meeting</option>
+          <option>night</option>
+          <option>open</option>
+          <option>other</option>
+          <option>party</option>
+          <option>permanent-exhibitions</option>
+          <option>photo</option>
+          <option>presentation</option>
+          <option>quest</option>
+          <option>show</option>
+          <option>social-activity</option>
+          <option>speed-dating</option>
+          <option>sport</option>
+          <option>stand-up</option>
+          <option>theater</option>
+          <option>tour</option>
+        </select>
+      <p>
         <textarea name="description"></textarea>
       <p>
         <input name="date" placeholder="2018-01-18" />
@@ -146,6 +185,7 @@ app.post('/activities', (req, res) => {
           coordsLat: parseFloat(req.body.coordsLat),
           coordsLon: parseFloat(req.body.coordsLon),
           company: req.body.company,
+          categories: req.body.categories,
           wholeDescription: req.body.description,
           date: req.body.date,
           timeStart: req.body.timeStart,
