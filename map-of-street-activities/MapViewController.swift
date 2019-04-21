@@ -33,8 +33,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
     }
     
     func loadInitialData() {
-        //locationManager.stopUpdatingLocation()
-        
         let request = URLRequest(url: URL(string: "http://vikiwai.local/activities")!)
         print("request: ", request as Any)
         let session = URLSession(configuration: .default)
