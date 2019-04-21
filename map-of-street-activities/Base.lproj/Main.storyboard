@@ -689,7 +689,8 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Khm-Gj-u1L">
                                 <rect key="frame" x="9" y="252" width="303" height="256"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.86272910290000004" green="0.93914141900000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="sectionIndexBackgroundColor" red="0.86272910290000004" green="0.93914141900000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="8Zi-YA-NWP" customClass="GetTableViewCell" customModule="map_of_street_activities" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="303" height="44"/>
@@ -709,9 +710,16 @@
                                                     <rect key="frame" x="236" y="-1" width="62" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <state key="normal" title="Remove"/>
+                                                    <connections>
+                                                        <action selector="removeActivity:" destination="8Zi-YA-NWP" eventType="touchUpInside" id="1Kc-Fi-E2l"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.86272910290000004" green="0.93914141900000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <outlet property="labelOfActivity" destination="qDz-ge-TxB" id="LTu-v0-HJU"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -739,6 +747,7 @@
                     <tabBarItem key="tabBarItem" title="Account" image="id-card" id="BHz-vc-ngP"/>
                     <connections>
                         <outlet property="imageView" destination="qx0-HB-Vdq" id="wXc-WE-A9v"/>
+                        <outlet property="tableView" destination="Khm-Gj-u1L" id="Fpe-ja-k8g"/>
                         <outlet property="textView" destination="l5C-O7-r3g" id="8x4-bS-hpZ"/>
                     </connections>
                 </viewController>

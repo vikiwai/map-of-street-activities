@@ -321,11 +321,6 @@ extension MapViewController: MKMapViewDelegate {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         
-        print("RRRRRRRR")
-        print(token!)
-        print(email!)
-        print(idToFavourites)
-        
         let params: [String: String] = [
             "authToken": token!,
             "id": idToFavourites

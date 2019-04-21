@@ -469,7 +469,7 @@ mongodb.MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser
 
   console.log(`Will listen on port ${port}...`)
 
-  // setTimeout(async() => loadData(db), 1);
+  //setTimeout(async() => loadData(db), 1);
   setInterval(async() => loadData(db), 10 * 60 * 1000);
 
   app.listen(port);

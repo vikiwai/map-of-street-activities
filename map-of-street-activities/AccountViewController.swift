@@ -18,7 +18,9 @@ class AccountViewController: UIViewController {
     
     @IBOutlet weak var textView: UITextView!
     
-    var favourites: Array<String> = []
+    var favourites: Array<Activity> = []
+    
+    @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +56,33 @@ class AccountViewController: UIViewController {
         }
         task.resume()
         
+        let request1 = URLRequest(url: URL(string: "http://vikiwai.local/favourites/" + email!)!)
+        print("request: ", request1 as Any)
+        let session1 = URLSession(configuration: .default)
+        
+        let task1 = session1.dataTask(with: request1) { (responseData, response, responseError) in
+            guard responseError == nil else {
+                print("error: ", responseError as Any)
+                return
+            }
+            
+            print("data: ", responseData!)
+            
+            let decoder1 = JSONDecoder()
+            
+            do {
+                let array = try decoder1.decode([Activity].self, from: responseData!)
+                
+                DispatchQueue.main.async {
+                    self.favourites = array
+                    print(array)
+                    self.tableView.reloadData()
+                }
+            } catch {
+                print("Something was wrong...", error)
+            }
+        }
+        task1.resume()
         
     }
     
@@ -108,36 +137,25 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? NewTableViewCell
-        cell?.information.text = favourites[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? GetTableViewCell
+        cell!.labelOfActivity.text! = favourites[indexPath.row].titleA
         cell?.cellDelegate = self
         cell?.index = indexPath
         return cell!
     }
 }
 
-extension AccountViewController: TableViewCellFavorites {
-    func onClickCell(index: Int, answer: Bool) {
-        var request = URLRequest(url: URL(string: "http://vikiwai.local/publishing-rights")!)
+extension AccountViewController: TableViewCellFavourites {
+    func onClickCell(index: Int) {
+        var request = URLRequest(url: URL(string: "http://vikiwai.local/favourites/" + email!)!)
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpMethod = "POST"
+        request.httpMethod = "DELETE"
         
-        var params: [String: String] = [:]
-        
-        if answer {
-            params = [
-                "authToken": token!,
-                "email": applications[index],
-                "canPublish": "true"
-            ]
-        } else {
-            params = [
-                "authToken": token!,
-                "email": applications[index],
-                "canPublish": "false"
-            ]
-        }
+        let params: [String: String] = [
+            "authToken": token!,
+            "id": favourites[index].id
+        ]
         
         let encoder = JSONEncoder()
         
@@ -169,6 +187,8 @@ extension AccountViewController: TableViewCellFavorites {
             print("Something was wrong")
         }
     }
+    
+    
 }
 
 
