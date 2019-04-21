@@ -36,10 +36,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // If the token is saved, then show the main application screen
         if token != nil {
-            let mainVC = UIStoryboard.init(name: "Main", bundle: nil)
-            let rootVC = mainVC.instantiateViewController(withIdentifier: "tarBarController")
-            self.window?.rootViewController = rootVC
-            self.window?.makeKeyAndVisible()
+            if email! == "admin" {
+                let mainVC = UIStoryboard.init(name: "Main", bundle: nil)
+                let rootVC = mainVC.instantiateViewController(withIdentifier: "adminController")
+                self.window?.rootViewController = rootVC
+                self.window?.makeKeyAndVisible()
+            } else {
+                let mainVC = UIStoryboard.init(name: "Main", bundle: nil)
+                let rootVC = mainVC.instantiateViewController(withIdentifier: "tarBarController")
+                self.window?.rootViewController = rootVC
+                self.window?.makeKeyAndVisible()
+            }
+            
         }
         // If there is no token, then show the application login screen
         else {

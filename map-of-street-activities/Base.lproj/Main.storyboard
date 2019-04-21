@@ -417,6 +417,9 @@
                                     <constraint firstAttribute="height" constant="29" id="aSY-ca-0q6"/>
                                 </constraints>
                                 <state key="normal" title="Log out"/>
+                                <connections>
+                                    <action selector="logOut:" destination="C1i-BN-pr4" eventType="touchUpInside" id="B21-LR-FaT"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.86272910290000004" green="0.93914141900000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
