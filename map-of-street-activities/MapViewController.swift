@@ -62,6 +62,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
     }
     
     var toolBar = UIToolbar()
+    var segmentedControl = UISegmentedControl(items: ["Day-time", "Category"])
     
     @IBAction func filterActivities(_ sender: Any) {
         filtersPicker.delegate = self
@@ -71,6 +72,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
         filtersPicker.contentMode = .center
         filtersPicker.frame = CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 300)
         self.view.addSubview(filtersPicker)
+        
+        segmentedControl = UISegmentedControl.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 40))
+        self.view.addSubview(segmentedControl)
         
         toolBar = UIToolbar.init(frame: CGRect.init(x: 0.0, y: UIScreen.main.bounds.size.height - 300, width: UIScreen.main.bounds.size.width, height: 50))
         toolBar.barStyle = .default
