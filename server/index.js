@@ -418,7 +418,21 @@ app.post('/favourites/:email', (req, res) => {
 });
 
 app.delete('/favourites/:email', (req, res) => {
-  // ...
+  console.log("DELETE /favourites/" + req.params.email + ":", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user || user.email !== req.params.email) {
+      res.send({ status: "INVALID_AUTH" });
+    }
+    else {
+      db.collection('users').updateOne(
+        { email: req.params.email },
+        { $pull: { favouriteIds: req.body.id } }
+      ).then(result => {
+        res.send({ status: "OK" });
+      });
+    }
+  });
 });
 
 const loadData = require('./loadData');
