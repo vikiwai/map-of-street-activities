@@ -35,6 +35,8 @@ app.get('/', (req, res) => {
       <p>
         <input type="password" name="password" placeholder="Пароль" />
       <p>
+        <label><input type="checkbox" name="isAdmin"/> isAdmin</label>
+      <p>
         <button type="submit">Отправить!</button>
     </form>
     <hr />
@@ -134,7 +136,7 @@ app.post('/users', (req, res) => {
       const newUser = Object.assign({}, req.body, {
         token: authToken,
         canPublish: false,
-        isAdmin: false
+        isAdmin: req.body.isAdmin ? true : false
       });
 
       db.collection('users').insertOne(newUser);
