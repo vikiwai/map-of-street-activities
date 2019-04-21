@@ -107,16 +107,25 @@ app.get('/', (req, res) => {
       <p>
         <input name="durationHours" placeholder="4.5" />
       <p>
-        <input name="authToken" placeholder="deadbeef1998" />
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
       <p>
         <button type="submit">Отправить!</button>
     </form>
     <hr />
     <form action="/userpic" method="POST" enctype="multipart/form-data">
       <p>
-        <input name="authToken" placeholder="deadbeef1998" />
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
       <p>
         <input type="file" name="userpic" />
+      <p>
+        <button type="submit">Отправить!</button>
+    </form>
+    <hr />
+    <form action="/publishing-rights-applications" method="POST">
+      <p>
+        Заявка на права публикации:
+      <p>
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
       <p>
         <button type="submit">Отправить!</button>
     </form>
