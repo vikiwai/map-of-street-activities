@@ -291,6 +291,38 @@ app.get('/profile/:authToken', (req, res) => {
   });
 });
 
+app.post('/publishing-rights-applications', (req, res) => {
+  console.log("POST /publishing-rights-applications:", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user) {
+      res.status(403).send({ status: 'INVALID_AUTH' });
+      return;
+    }
+
+    db.collection('applications').findOne({ email: user.email }).then(application => {
+      if(application) {
+        res.status(400).send({ status: 'ALREADY_APPLIED' });
+        return;
+      }
+
+      const newApplication = {
+        email: user.email,
+        isOpen: true
+      };
+
+      db.collection('applications').insertOne(newApplication).then(result => {
+        if(result) {
+          res.send({ status: 'OK' });
+        }
+        else {
+          res.send({ status: 'ERROR' });
+        }
+      });
+    });
+  });
+});
+
 const loadData = require('./loadData');
 
 MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
