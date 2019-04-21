@@ -199,7 +199,7 @@ app.get('/activities', (req, res) => {
       res.send([]);
     }
     else {
-      res.send(activities.map(activity => Object.assign(activity, { _id: undefined })));
+      res.send(activities.map(activity => Object.assign({}, activity, { _id: undefined, id: activity._id })));
     }
   });
 });
