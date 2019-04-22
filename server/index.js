@@ -219,13 +219,20 @@ app.post('/activities', (req, res) => {
 
   db.collection('users').findOne({ token: req.body.authToken }).then(user => {
     if(user) {
+      let categories = req.body.categories;
+
+      if(!Array.isArray(categories)) {
+        categories = [categories];
+      }
+
+
       db.collection('activities').insertOne({
           titleA: req.body.title,
           locationName: req.body.locationName,
           coordsLat: parseFloat(req.body.coordsLat),
           coordsLon: parseFloat(req.body.coordsLon),
           company: req.body.company,
-          categories: req.body.categories,
+          categories: categories,
           wholeDescription: req.body.description,
           date: req.body.date,
           timeStart: req.body.timeStart,
