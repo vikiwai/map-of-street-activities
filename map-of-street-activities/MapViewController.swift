@@ -19,10 +19,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
 
     var activities: [Activity] = []
     
-    // Create a CLLocationManager
     var locationManager = CLLocationManager()
     
     // The location manager will update the delegate function.
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let location = locations[0]
         
@@ -32,6 +32,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
         mapView.setRegion(region, animated: true)
         
         self.mapView.showsUserLocation = true
+        mapView.setUserTrackingMode(.follow, animated: true)
     }
     
     func loadInitialData() {
@@ -96,7 +97,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
             myPickerData = ["ball", "business events", "cinema", "circus", "comedy-club", "concert", "dance trainings", "education", "evening", "exhibition",
                             "fashion", "festival", "flashmob", "games", "global", "holiday", "kids", "kvn", "magic", "masquerade", "meeting", "night",
                             "open", "other", "party", "permanent exhibitions", "photo", "presentation", "quest", "show", "social activity", "speed-dating",
-                            "sport", "stand-up", "theater", "tour"]
+                            "sport", "stand-up", "theater", "tour", "whatever"]
             filtersPicker.reloadAllComponents()
             segmentedControl.selectedSegmentIndex = 1
         default:
@@ -129,8 +130,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
         filtersPicker.removeFromSuperview()
         toolBar.removeFromSuperview()
         segmentedControl.removeFromSuperview()
-        
-        print(filter)
         
         switch filter {
         case "morning":
@@ -185,6 +184,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
                 self.mapView.removeAnnotations(self.activities)
                 self.mapView.addAnnotations(searchedActivities)
             }
+        case "whatever":
+            DispatchQueue.main.async {
+                self.mapView.addAnnotations(self.activities)
+            }
         default:
             var searchedActivities: [Activity] = []
             
@@ -206,7 +209,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
     
     @IBOutlet weak var searchText: UITextField!
     
-    
     @IBAction func searchActivities(_ sender: Any) {
         var searchedActivities: [Activity] = []
         
@@ -224,25 +226,22 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
         mapView.delegate = self
         
         // Decide whether application will need the users location always or only when the apps in use
         locationManager.requestAlwaysAuthorization()
         locationManager.requestWhenInUseAuthorization()
-        
         // Set our location manager to update
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.startUpdatingLocation()
-            
         } else {
             print("Turn on location services or GPS")
         }
+        
 
         loadInitialData()
-        
         self.hideKeyboardWhenTappedAround()
     }
     
@@ -285,20 +284,7 @@ extension MapViewController: MKMapViewDelegate {
         let view: MKMarkerAnnotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         view.canShowCallout = true
         view.calloutOffset = CGPoint(x: -5, y: 5)
-        /*
-        let starImage = UIImage(named: "star-7")
-        let starButton = UIButton()
-        starButton.setImage(starImage, for: .normal)
-        view.rightCalloutAccessoryView = starButton
-        */
         view.rightCalloutAccessoryView = UIButton(type: .contactAdd)
-        
-        /*
-        let starButton = UIButton(type: UIButton.ButtonType.custom)
-        starButton.setImage(UIImage(named: "star-7"), for: .normal)
-        starButton.setImage(UIImage(named: "star-7"), for: .highlighted)
-        view.rightCalloutAccessoryView = starButton
-        */
         
         let detailLabel = UILabel()
         detailLabel.numberOfLines = 0
@@ -356,3 +342,4 @@ extension MapViewController: MKMapViewDelegate {
         }
     }
 }
+
