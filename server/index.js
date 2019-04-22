@@ -151,6 +151,15 @@ app.get('/', (req, res) => {
       <p>
         <button type="submit">Отправить!</button>
     </form>
+    <hr />
+    <form action="/password" method="POST">
+      <p>
+        <input name="authToken" placeholder="deadbeef-1337-abad-babe-aaaabbbbcccc" />
+      <p>
+        <input name="password" placeholder="qwerty123" />
+      <p>
+        <button type="submit">Отправить!</button>
+    </form>
     `);
 });
 
@@ -460,6 +469,30 @@ app.delete('/favourites/:email', (req, res) => {
         res.send({ status: "OK" });
       });
     }
+  });
+});
+
+app.post('/password', (req, res) => {
+  console.log("POST /password:", req.body);
+
+  db.collection('users').findOne({ token: req.body.authToken }).then(user => {
+    if(!user) {
+      res.send({ status: "INVALID_AUTH" });
+      return;
+    }
+
+    db.collection('users').updateOne(
+      { email: user.email },
+      { $set: { password: req.body.password } }
+    ).then(result => {
+      if(result) {
+        res.send({ status: "OK" });
+      }
+      else {
+        res.send({ status: "ERROR" });
+      }
+    });
+
   });
 });
 
