@@ -27,6 +27,7 @@ class AccountViewController: UIViewController {
         fetchAuthToken()
         self.hideKeyboardWhenTappedAround()
         imageView.downloaded(from: "http://vikiwai.local/userpic/" + email!)
+        self.tableView.reloadData()
         
         
         let request = URLRequest(url: URL(string: "http://vikiwai.local/profile/" + token!)!)
@@ -175,7 +176,7 @@ extension AccountViewController: TableViewCellFavourites {
                     let dict = utf8Representation.toJSON() as? [String: String]
                     if dict!["status"]! == "OK" {
                         DispatchQueue.main.async{
-                            print("DONE")
+                            self.tableView.reloadData()
                         }
                     }
                 } else {
