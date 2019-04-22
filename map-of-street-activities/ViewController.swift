@@ -2,7 +2,6 @@
 //  ViewController.swift
 //  map-of-street-activities
 //
-//  Created by vikiwai on 07/04/2019.
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -26,7 +25,7 @@ class ViewController: UIViewController {
     
     // Go to the main screen of the application if the user is already registered
     @IBAction func requestEntry(_ sender: Any) {
-        var request = URLRequest(url: URL(string: "http://vikiwai.local/auth")!)
+        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/auth")!)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         

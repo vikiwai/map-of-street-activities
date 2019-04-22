@@ -2,7 +2,6 @@
 //  AppDelegate.swift
 //  map-of-street-activities
 //
-//  Created by vikiwai on 07/04/2019.
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -132,14 +131,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Token")
-        
-//        let pidrRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-//        
-//        do {
-//            try managedContext.persistentStoreCoordinator!.execute(pidrRequest, with: managedContext)
-//        } catch let error as NSError {
-//            // TODO: handle the error
-//        }
         
         do {
             let result = try managedContext.fetch(fetchRequest)

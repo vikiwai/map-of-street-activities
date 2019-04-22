@@ -2,7 +2,6 @@
 //  CreatorViewController.swift
 //  map-of-street-activities
 //
-//  Created by vikiwai on 08/04/2019.
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -25,7 +24,7 @@ class CreatorViewController: UIViewController {
     @IBOutlet weak var inputDescriptionField: UITextView!
     
     @IBAction func createEventButton(_ sender: Any) {
-        var request = URLRequest(url: URL(string: "http://vikiwai.local/activities")!)
+        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/activities")!)
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"

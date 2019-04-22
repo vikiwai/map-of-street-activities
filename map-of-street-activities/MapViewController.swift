@@ -2,7 +2,6 @@
 //  MapViewController.swift
 //  map-of-street-activities
 //
-//  Created by vikiwai on 08/04/2019.
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -36,7 +35,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
     }
     
     func loadInitialData() {
-        let request = URLRequest(url: URL(string: "http://vikiwai.local/activities")!)
+        let request = URLRequest(url: URL(string: "http://85.143.172.4:81/activities")!)
         print("request: ", request as Any)
         let session = URLSession(configuration: .default)
         
@@ -316,7 +315,7 @@ extension MapViewController: MKMapViewDelegate {
         
         fetchAuthToken()
         
-        var request = URLRequest(url: URL(string: "http://vikiwai.local/favourites/" + email!)!)
+        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/favourites/" + email!)!)
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"

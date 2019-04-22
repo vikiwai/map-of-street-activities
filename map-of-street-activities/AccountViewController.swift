@@ -2,7 +2,6 @@
 //  AccountViewController.swift
 //  map-of-street-activities
 //
-//  Created by vikiwai on 08/04/2019.
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -26,11 +25,11 @@ class AccountViewController: UIViewController {
         super.viewDidLoad()
         fetchAuthToken()
         self.hideKeyboardWhenTappedAround()
-        imageView.downloaded(from: "http://vikiwai.local/userpic/" + email!)
+        imageView.downloaded(from: "http://85.143.172.4:81/userpic/" + email!)
         self.tableView.reloadData()
         
         
-        let request = URLRequest(url: URL(string: "http://vikiwai.local/profile/" + token!)!)
+        let request = URLRequest(url: URL(string: "http://85.143.172.4:81/profile/" + token!)!)
         print("request: ", request as Any)
         let session = URLSession(configuration: .default)
         
@@ -57,7 +56,7 @@ class AccountViewController: UIViewController {
         }
         task.resume()
         
-        let request1 = URLRequest(url: URL(string: "http://vikiwai.local/favourites/" + email!)!)
+        let request1 = URLRequest(url: URL(string: "http://85.143.172.4:81/favourites/" + email!)!)
         print("request: ", request1 as Any)
         let session1 = URLSession(configuration: .default)
         
@@ -148,7 +147,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension AccountViewController: TableViewCellFavourites {
     func onClickCell(index: Int) {
-        var request = URLRequest(url: URL(string: "http://vikiwai.local/favourites/" + email!)!)
+        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/favourites/" + email!)!)
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "DELETE"

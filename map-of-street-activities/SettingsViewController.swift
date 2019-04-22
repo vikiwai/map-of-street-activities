@@ -2,7 +2,6 @@
 //  SettingsViewController.swift
 //  map-of-street-activities
 //
-//  Created by vikiwai on 08/04/2019.
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -47,7 +46,7 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
             let imageData = imageView.image!.jpegData(compressionQuality: 0.1)
             
             if imageData != nil{
-                var request = URLRequest(url: URL(string:"http://vikiwai.local/userpic")!)
+                var request = URLRequest(url: URL(string:"http://85.143.172.4:81/userpic")!)
                 
                 request.httpMethod = "POST"
                 
@@ -98,7 +97,7 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
     @IBOutlet weak var inputNameCompanyField: UITextField!
     
     @IBAction func getRights(_ sender: Any) {
-        var request = URLRequest(url: URL(string: "http://vikiwai.local/publishing-rights-applications")!)
+        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/publishing-rights-applications")!)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         

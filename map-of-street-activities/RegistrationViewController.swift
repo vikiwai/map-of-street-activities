@@ -2,7 +2,6 @@
 //  RegistrationViewController.swift
 //  map-of-street-activities
 //
-//  Created by vikiwai on 08/04/2019.
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -49,7 +48,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
             return
         }
         
-        var request = URLRequest(url: URL(string: "http://vikiwai.local/users")!)
+        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/users")!)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         

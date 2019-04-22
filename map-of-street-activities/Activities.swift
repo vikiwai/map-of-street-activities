@@ -2,7 +2,6 @@
 //  Activities.swift
 //  map-of-street-activities
 //
-//  Created by vikiwai on 13/04/2019.
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
