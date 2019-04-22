@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 
 class AccountViewController: UIViewController {
-
+    
     var token: String?
     var email: String?
     
@@ -56,6 +56,12 @@ class AccountViewController: UIViewController {
         }
         task.resume()
         
+        getActivities()
+       
+        
+    }
+    
+    func getActivities() {
         let request1 = URLRequest(url: URL(string: "http://85.143.172.4:81/favourites/" + email!)!)
         print("request: ", request1 as Any)
         let session1 = URLSession(configuration: .default)
@@ -83,7 +89,6 @@ class AccountViewController: UIViewController {
             }
         }
         task1.resume()
-        
     }
     
     func fetchAuthToken() {
@@ -175,6 +180,7 @@ extension AccountViewController: TableViewCellFavourites {
                     let dict = utf8Representation.toJSON() as? [String: String]
                     if dict!["status"]! == "OK" {
                         DispatchQueue.main.async{
+                            self.getActivities()
                             self.tableView.reloadData()
                         }
                     }
@@ -187,8 +193,15 @@ extension AccountViewController: TableViewCellFavourites {
             print("Something was wrong")
         }
     }
-    
-    
+}
+
+extension AccountViewController: Information {
+    func isSmthDone() {
+        DispatchQueue.main.async{
+            self.getActivities()
+            self.tableView.reloadData()
+        }
+    }
 }
 
 

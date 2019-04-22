@@ -71,7 +71,7 @@ class ViewController: UIViewController {
                     }
                     else {
                         DispatchQueue.main.async{
-                            let alertController = UIAlertController(title: "Ooops", message: "Wrong e-mail or password", preferredStyle: .alert)
+                            let alertController = UIAlertController(title: "Wrong e-mail or password", message: "Wrong e-mail or password", preferredStyle: .alert)
                             let okAction = UIAlertAction(title: "Fix", style: UIAlertAction.Style.default) {
                                 UIAlertAction in NSLog("OK")
                             }

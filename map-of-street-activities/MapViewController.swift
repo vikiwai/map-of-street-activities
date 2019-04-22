@@ -10,8 +10,12 @@ import MapKit
 import CoreLocation
 import CoreData
 
+protocol Information {
+    func isSmthDone()
+}
+
 class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
-    
+    var cellDelegate: Information?
     var token: String?
     var email: String?
     
@@ -328,9 +332,7 @@ extension MapViewController: MKMapViewDelegate {
                     print("response: ", utf8Representation)
                     let dict = utf8Representation.toJSON() as? [String: String]
                     if dict!["status"]! == "OK" {
-                        DispatchQueue.main.async{
-                            print("DONE")
-                        }
+                        self.cellDelegate?.isSmthDone()
                     }
                 } else {
                     print("No readable data received in response")
