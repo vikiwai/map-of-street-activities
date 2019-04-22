@@ -249,7 +249,7 @@ app.post('/activities', (req, res) => {
   });
 });
 
-app.get('/check-publishing-rights', (req, res) => {
+app.post('/check-publishing-rights', (req, res) => {
   console.log("POST /check-publishing-rights:", req.body);
 
   db.collection('users').findOne({ token: req.body.authToken }).then(user => {
