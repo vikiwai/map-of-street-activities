@@ -465,14 +465,14 @@ app.delete('/favourites/:email', (req, res) => {
 
 const loadData = require('./loadData');
 
-mongodb.MongoClient.connect('mongodb://localhost:27017/viker', { useNewUrlParser: true }, (err, client) => {
+mongodb.MongoClient.connect('mongodb://localhost:110/viker', { useNewUrlParser: true }, (err, client) => {
   if(err) {
     throw err;
   }
 
   db = client.db('viker');
 
-  const port = 80;
+  const port = 81;
 
   console.log(`Will listen on port ${port}...`)
 
