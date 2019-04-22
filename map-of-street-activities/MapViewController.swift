@@ -57,7 +57,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
                     self.mapView.addAnnotations(self.activities)
                 }
             } catch {
-                print("Something was wrong...", error)
+                print("Something was wrong!", error)
             }
         }
         task.resume()

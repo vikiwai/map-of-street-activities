@@ -37,7 +37,6 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        print("fjjsn")
         fetchAuthToken()
         
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {

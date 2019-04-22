@@ -24,12 +24,61 @@ class CreatorViewController: UIViewController {
     @IBOutlet weak var inputDescriptionField: UITextView!
     
     @IBAction func createEventButton(_ sender: Any) {
-        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/activities")!)
-        
+        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/check-publishing-rights")!)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         
         let params: [String: String] = [
+            "authToken": token!
+        ]
+        
+        let encoder = JSONEncoder()
+        
+        do {
+            request.httpBody = try encoder.encode(params)
+            
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            let task = session.dataTask(with: request) { (responseData, response, responseError) in
+                guard responseError == nil else {
+                    print(responseError as Any)
+                    return
+                }
+                
+                if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
+                    print("response: ", utf8Representation)
+                    
+                    let dict = utf8Representation.toJSON() as? [String: Bool]
+                    
+                    if dict!["canPublish"]! != true {
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Ooops", message: "You have no rights", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Want to get it!", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
+                            
+                            self.present(alertController, animated: true, completion: nil)
+                            
+                            return
+                        }
+                    }
+                } else {
+                    print("No readable data received in response")
+                }
+            }
+            task.resume()
+        } catch {
+            print("Something was wrong")
+        }
+                    
+        
+        var request1 = URLRequest(url: URL(string: "http://85.143.172.4:81/activities")!)
+        
+        request1.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request1.httpMethod = "POST"
+        
+        let params1: [String: String] = [
             "title": inputTitleField.text!,
             "locationName": inputAddressField.text!,
             "coordsLat": inputLatitudeField.text!,
@@ -42,14 +91,14 @@ class CreatorViewController: UIViewController {
             "authToken": token!,
         ]
         
-        let encoder = JSONEncoder()
+        let encoder1 = JSONEncoder()
         
         do {
-            request.httpBody = try encoder.encode(params)
+            request1.httpBody = try encoder1.encode(params1)
     
-            let config = URLSessionConfiguration.default
-            let session = URLSession(configuration: config)
-            let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            let config1 = URLSessionConfiguration.default
+            let session1 = URLSession(configuration: config1)
+            let task1 = session1.dataTask(with: request1) { (responseData, response, responseError) in
                 guard responseError == nil else {
                     print(responseError as Any)
                     return
@@ -78,7 +127,7 @@ class CreatorViewController: UIViewController {
                     print("No readable data received in response")
                 }
             }
-            task.resume()
+            task1.resume()
         } catch {
             print("Something was wrong")
         }
