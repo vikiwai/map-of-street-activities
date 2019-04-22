@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
         <select name="gender">
           <option>Male</option>
           <option>Female</option>
-          <option>Huilo</option>
+          <option>Rather not say</option>
         </select>
       <p>
         <input name="email" placeholder="@.com" />
