@@ -498,12 +498,12 @@ app.post('/password', (req, res) => {
 
 const loadData = require('./loadData');
 
-mongodb.MongoClient.connect('mongodb://localhost:110/viker', { useNewUrlParser: true }, (err, client) => {
+mongodb.MongoClient.connect('mongodb://localhost:110/map-of-street-activities', { useNewUrlParser: true }, (err, client) => {
   if(err) {
     throw err;
   }
 
-  db = client.db('viker');
+  db = client.db('map-of-street-activities');
 
   const port = 81;
 
