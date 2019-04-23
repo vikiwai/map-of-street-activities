@@ -2,6 +2,8 @@
 //  RegistrationViewController.swift
 //  map-of-street-activities
 //
+//  server hostname — 85.143.173.40, port:81
+//
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -48,7 +50,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
             return
         }
         
-        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/users")!)
+        var request = URLRequest(url: URL(string: "http://85.143.173.40:81/users")!)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         

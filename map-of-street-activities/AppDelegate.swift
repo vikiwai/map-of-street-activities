@@ -2,6 +2,8 @@
 //  AppDelegate.swift
 //  map-of-street-activities
 //
+//  server hostname — 85.143.173.40, port:81
+//
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 

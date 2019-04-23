@@ -2,6 +2,8 @@
 //  AccountViewController.swift
 //  map-of-street-activities
 //
+//  server hostname — 85.143.173.40, port:81
+//
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -24,11 +26,15 @@ class AccountViewController: UIViewController {
         super.viewDidLoad()
         fetchAuthToken()
         self.hideKeyboardWhenTappedAround()
-        imageView.downloaded(from: "http://85.143.172.4:81/userpic/" + email!)
+        getProfile()
+        getActivities()
+    }
+    
+    func getProfile() {
+        imageView.downloaded(from: "http://85.143.173.40:81/userpic/" + email!)
         self.tableView.reloadData()
         
-        
-        let request = URLRequest(url: URL(string: "http://85.143.172.4:81/profile/" + token!)!)
+        let request = URLRequest(url: URL(string: "http://85.143.173.40:81/profile/" + token!)!)
         print("request: ", request as Any)
         let session = URLSession(configuration: .default)
         
@@ -53,12 +59,10 @@ class AccountViewController: UIViewController {
             }
         }
         task.resume()
-        
-        getActivities()
     }
     
     func getActivities() {
-        let request1 = URLRequest(url: URL(string: "http://85.143.172.4:81/favourites/" + email!)!)
+        let request1 = URLRequest(url: URL(string: "http://85.143.173.40:81/favourites/" + email!)!)
         print("request: ", request1 as Any)
         let session1 = URLSession(configuration: .default)
         
@@ -147,7 +151,7 @@ extension AccountViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension AccountViewController: TableViewCellFavourites {
     func onClickCell(index: Int) {
-        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/favourites/" + email!)!)
+        var request = URLRequest(url: URL(string: "http://85.143.173.40:81/favourites/" + email!)!)
         
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "DELETE"
@@ -202,10 +206,7 @@ extension AccountViewController: Information {
 extension AccountViewController: Note {
     func isUpload() {
         DispatchQueue.main.async {
-            self.imageView.downloaded(from: "http://85.143.172.4:81/userpic/" + self.email!)
+            self.getProfile()
         }
     }
 }
-
-
-

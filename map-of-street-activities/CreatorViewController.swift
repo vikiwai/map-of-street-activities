@@ -2,6 +2,8 @@
 //  CreatorViewController.swift
 //  map-of-street-activities
 //
+//  server hostname — 85.143.173.40, port:81
+//
 //  Copyright © 2019 Victoria Bunyaeva. All rights reserved.
 //
 
@@ -29,7 +31,7 @@ class CreatorViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
     let myPickerData: Array<String> = ["ball", "business events", "cinema", "circus", "comedy-club", "concert", "dance trainings", "education",                                             "evening", "exhibition", "fashion", "festival", "flashmob", "games", "global", "holiday", "kids", "kvn", "magic",                                    "masquerade", "meeting", "night", "open", "other", "party", "permanent exhibitions", "photo", "presentation",                                        "quest", "show", "social activity", "speed-dating", "sport", "stand-up", "theater", "tour", "whatever"]
     
     @IBAction func createEventButton(_ sender: Any) {
-        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/check-publishing-rights")!)
+        var request = URLRequest(url: URL(string: "http://85.143.173.40:81/check-publishing-rights")!)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         
@@ -124,7 +126,7 @@ class CreatorViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
             return
         }
         
-        var request1 = URLRequest(url: URL(string: "http://85.143.172.4:81/activities")!)
+        var request1 = URLRequest(url: URL(string: "http://85.143.173.40:81/activities")!)
         
         request1.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request1.httpMethod = "POST"
