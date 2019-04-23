@@ -164,8 +164,8 @@ extension AccountViewController: TableViewCellFavourites {
             
             let config = URLSessionConfiguration.default
             let session = URLSession(configuration: config)
-            let task = session.dataTask(with: request) { (responseData, response, responseError) in
-                guard responseError == nil else {
+            let task = session.dataTask(with: request) {
+                (responseData, response, responseError) in guard responseError == nil else {
                     print(responseError as Any)
                     return
                 }

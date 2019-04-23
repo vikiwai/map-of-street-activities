@@ -165,6 +165,7 @@ class CreatorViewController: UIViewController, UIPickerViewDelegate, UIPickerVie
                                     textField.text = ""
                                 }
                             }
+                            self.inputDescriptionField.text! = ""
                             let alertController = UIAlertController(title: "Done", message: "Your event has been created", preferredStyle: .alert)
                             let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
                                 UIAlertAction in NSLog("OK")

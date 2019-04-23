@@ -58,25 +58,28 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
                 
                 if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
                     print("response: ", utf8Representation)
-                    DispatchQueue.main.async {
-                        let alertController = UIAlertController(title: "Done", message: "Your password has been changed", preferredStyle: .alert)
-                        let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
-                            UIAlertAction in NSLog("OK")
-                        }
-                        alertController.addAction(okAction)
+                    let dict = utf8Representation.toJSON() as? [String: String]
+                    if dict!["status"]! == "OK" {
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Done", message: "Your password has been changed", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
                         
-                        self.present(alertController, animated: true, completion: nil)
-                    }
-                } else {
-                    print("No readable data received in response")
-                    DispatchQueue.main.async {
-                    let alertController = UIAlertController(title: "Failure", message: "INVALID_AUTH", preferredStyle: .alert)
-                    let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
-                        UIAlertAction in NSLog("OK")
-                    }
-                    alertController.addAction(okAction)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    } else if dict!["status"]! == "INVALID_AUTH" {
+                        print("No readable data received in response")
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Failure", message: "INVALID_AUTH", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
                     
-                    self.present(alertController, animated: true, completion: nil)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
                     }
                 }
             }
@@ -85,7 +88,6 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
             print("Something was wrong with changing password")
         }
     }
-    
     
     @IBOutlet weak var importImageButton: UIButton!
     
@@ -210,6 +212,8 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
                     let dict = utf8Representation.toJSON() as? [String: String]
                     if dict!["status"]! == "OK" {
                         DispatchQueue.main.async {
+                            self.inputNameCompanyField.text! = ""
+                            self.inputEmailField.text! = ""
                             let alertController = UIAlertController(title: "Done", message: "Rights to create your own events were requested", preferredStyle: .alert)
                             let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
                                 UIAlertAction in NSLog("OK")
@@ -221,6 +225,16 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
                     } else if dict!["status"]! == "ALREADY_APPLIED" {
                         DispatchQueue.main.async {
                             let alertController = UIAlertController(title: "Failure", message: "You already have rights to create events", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
+                            
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    } else if dict!["status"]! == "INVALID_AUTH" {
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Failure", message: "INVALID_AUTH", preferredStyle: .alert)
                             let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
                                 UIAlertAction in NSLog("OK")
                             }
