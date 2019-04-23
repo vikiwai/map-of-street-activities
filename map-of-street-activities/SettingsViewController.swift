@@ -8,16 +8,82 @@
 import UIKit
 import CoreData
 
+protocol Note {
+    func isUpload()
+}
+
 class SettingsViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    var authToken: NSManagedObject?
+    var cellDelegate: Note?
     
+    var authToken: NSManagedObject?
     var token: String?
     var email: String?
     
-    @IBOutlet weak var inputOldPasswordField: UITextField!
+    @IBOutlet weak var inputConfirmNewPasswordField: UITextField!
     @IBOutlet weak var inputNewPasswordField: UITextField!
     
     @IBAction func changePassword(_ sender: Any) {
+        if inputNewPasswordField.text! != inputConfirmNewPasswordField.text! {
+            let alertController = UIAlertController(title: "Passwords don't match", message: "The entered passwords are different, so changes are not completed", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                UIAlertAction in NSLog("OK")
+            }
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+            return
+        }
+        
+        var request = URLRequest(url: URL(string: "http://85.143.172.4:81/password")!)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        let params: [String: String] = [
+            "authToken": token!,
+            "password": inputNewPasswordField.text!
+        ]
+        
+        let encoder = JSONEncoder()
+        
+        do {
+            request.httpBody = try encoder.encode(params)
+            
+            let config = URLSessionConfiguration.default
+            let session = URLSession(configuration: config)
+            let task = session.dataTask(with: request) {
+                (responseData, response, responseError) in guard responseError == nil else {
+                    print(responseError as Any)
+                    return
+                }
+                
+                if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
+                    print("response: ", utf8Representation)
+                    DispatchQueue.main.async {
+                        let alertController = UIAlertController(title: "Done", message: "Your password has been changed", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                            UIAlertAction in NSLog("OK")
+                        }
+                        alertController.addAction(okAction)
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                } else {
+                    print("No readable data received in response")
+                    DispatchQueue.main.async {
+                    let alertController = UIAlertController(title: "Failure", message: "INVALID_AUTH", preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                        UIAlertAction in NSLog("OK")
+                    }
+                    alertController.addAction(okAction)
+                    
+                    self.present(alertController, animated: true, completion: nil)
+                    }
+                }
+            }
+            task.resume()
+        } catch {
+            print("Something was wrong with changing password")
+        }
     }
     
     
@@ -36,7 +102,7 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
         self.present(image, animated: true)
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         fetchAuthToken()
         
         if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
@@ -77,15 +143,37 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
                     
                     if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
                         print("response: ", utf8Representation)
+                        
+                        DispatchQueue.main.async {
+                            self.cellDelegate?.isUpload()
+                        
+                            let alertController = UIAlertController(title: "Done", message: "The selected photo has been uploaded", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
+                        
+                            self.present(alertController, animated: true, completion: nil)
+                        }
                     } else {
                         print("No readable data received in response")
+                        
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Failure", message: "Not possible to import photo", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
+                        
+                            self.present(alertController, animated: true, completion: nil)
+                        }
                     }
                 }
                 task.resume()
                 
             }
         } else {
-            print("Not possible to import")
+            print("Something was wrong with uploading photo")
         }
         
         self.dismiss(animated: true, completion: nil)
@@ -119,28 +207,40 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate, 
                 
                 if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
                     print("response: ", utf8Representation)
-                    // TODO: Already exist
-                    DispatchQueue.main.async {
-                        let alertController = UIAlertController(title: "Complit", message: "Right are requested", preferredStyle: .alert)
-                        let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
-                            UIAlertAction in NSLog("OK")
-                        }
-                        alertController.addAction(okAction)
+                    let dict = utf8Representation.toJSON() as? [String: String]
+                    if dict!["status"]! == "OK" {
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Done", message: "Rights to create your own events were requested", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
                         
-                        self.present(alertController, animated: true, completion: nil)
+                            self.present(alertController, animated: true, completion: nil)
+                        }
+                    } else if dict!["status"]! == "ALREADY_APPLIED" {
+                        DispatchQueue.main.async {
+                            let alertController = UIAlertController(title: "Failure", message: "You already have rights to create events", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                                UIAlertAction in NSLog("OK")
+                            }
+                            alertController.addAction(okAction)
+                            
+                            self.present(alertController, animated: true, completion: nil)
+                        }
                     }
                 } else {
-                    print("Error")
+                    print("No readable data received in response")
                 }
             }
             task.resume()
         } catch {
-            print("Something was wrong")
+            print("Something was wrong with post request for getting rights")
         }
     }
     
     @IBAction func logOut(_ sender: Any) {
-        let alertController = UIAlertController(title: "Hey", message: "Terminate the application?", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Quit the application?", message: "Are you sure? User will lose authentication", preferredStyle: .alert)
         
         let yesAction = UIAlertAction(title: "Yes", style: UIAlertAction.Style.default) {
             UIAlertAction in NSLog("Yes")

@@ -62,7 +62,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
                     self.mapView.addAnnotations(self.activities)
                 }
             } catch {
-                print("Something was wrong!", error)
+                print("Something was wrong with get request for loading activities", error)
             }
         }
         task.resume()
@@ -244,7 +244,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, UIPickerVi
             print("Turn on location services or GPS")
         }
         
-
         loadInitialData()
         self.hideKeyboardWhenTappedAround()
     }
@@ -332,7 +331,16 @@ extension MapViewController: MKMapViewDelegate {
                     print("response: ", utf8Representation)
                     let dict = utf8Representation.toJSON() as? [String: String]
                     if dict!["status"]! == "OK" {
+                        DispatchQueue.main.async {
+                        let alertController = UIAlertController(title: "Added to favourites", message: "Selected event added to custom favourites", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
+                            UIAlertAction in NSLog("OK")
+                        }
+                        alertController.addAction(okAction)
+                        
+                        self.present(alertController, animated: true, completion: nil)
                         self.cellDelegate?.isSmthDone()
+                        }
                     }
                 } else {
                     print("No readable data received in response")
@@ -340,7 +348,7 @@ extension MapViewController: MKMapViewDelegate {
             }
             task.resume()
         } catch {
-            print("Something was wrong")
+            print("Something was wrong with post request for adding to favourites")
         }
     }
 }

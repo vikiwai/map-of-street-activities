@@ -14,7 +14,6 @@ class AccountViewController: UIViewController {
     var email: String?
     
     @IBOutlet weak var imageView: UIImageView!
-    
     @IBOutlet weak var textView: UITextView!
     
     var favourites: Array<Activity> = []
@@ -47,18 +46,15 @@ class AccountViewController: UIViewController {
                 let person = try decoder.decode(Profile.self, from: responseData!)
                 
                 DispatchQueue.main.async {
-                    print(person)
                     self.textView.text = "Full name: \(person.firstName) \(person.lastName) \nGender: \(person.gender) \nDate of Birth: \(person.birthDate) \nE-mail: \(person.email) \nRight for creating event: \(person.canPublish)"
                 }
             } catch {
-                print("Something was wrong...", error)
+                print("Something was wrong with getting information about user", error)
             }
         }
         task.resume()
         
         getActivities()
-       
-        
     }
     
     func getActivities() {
@@ -81,11 +77,10 @@ class AccountViewController: UIViewController {
                 
                 DispatchQueue.main.async {
                     self.favourites = array
-                    print(array)
                     self.tableView.reloadData()
                 }
             } catch {
-                print("Something was wrong...", error)
+                print("Something was wrong with getting favourites activities for user", error)
             }
         }
         task1.resume()
@@ -179,7 +174,7 @@ extension AccountViewController: TableViewCellFavourites {
                     print("response: ", utf8Representation)
                     let dict = utf8Representation.toJSON() as? [String: String]
                     if dict!["status"]! == "OK" {
-                        DispatchQueue.main.async{
+                        DispatchQueue.main.async {
                             self.getActivities()
                             self.tableView.reloadData()
                         }
@@ -190,16 +185,24 @@ extension AccountViewController: TableViewCellFavourites {
             }
             task.resume()
         } catch {
-            print("Something was wrong")
+            print("Something was wrong with deleting favourites activities")
         }
     }
 }
 
 extension AccountViewController: Information {
     func isSmthDone() {
-        DispatchQueue.main.async{
+        DispatchQueue.main.async {
             self.getActivities()
             self.tableView.reloadData()
+        }
+    }
+}
+
+extension AccountViewController: Note {
+    func isUpload() {
+        DispatchQueue.main.async {
+            self.imageView.downloaded(from: "http://85.143.172.4:81/userpic/" + self.email!)
         }
     }
 }

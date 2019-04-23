@@ -71,8 +71,8 @@ class ViewController: UIViewController {
                     }
                     else {
                         DispatchQueue.main.async{
-                            let alertController = UIAlertController(title: "Wrong e-mail or password", message: "Wrong e-mail or password", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "Fix", style: UIAlertAction.Style.default) {
+                            let alertController = UIAlertController(title: "Wrong e-mail or password", message: "The entered password doesn't match the user or the entered e-mail address doesn't exist", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
                                 UIAlertAction in NSLog("OK")
                             }
                             alertController.addAction(okAction)
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
             }
             task.resume()
         } catch {
-            print("Something was wrong")
+            print("Something was wrong with post request for authorization")
         }
     }
     
@@ -122,8 +122,7 @@ class ViewController: UIViewController {
 
 extension UIViewController {
     func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
-                                                                 action: #selector(UIViewController.dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }

@@ -90,8 +90,8 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
                         }
                     } else {
                         DispatchQueue.main.async {
-                            let alertController = UIAlertController(title: "Ooops", message: "This e-mail is already in use", preferredStyle: .alert)
-                            let okAction = UIAlertAction(title: "Correct e-mail adress", style: UIAlertAction.Style.default) {
+                            let alertController = UIAlertController(title: "E-mail is already in use", message: "The address you entered is already taken by another user", preferredStyle: .alert)
+                            let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
                                 UIAlertAction in NSLog("OK")
                             }
                             alertController.addAction(okAction)
@@ -105,7 +105,7 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
             }
             task.resume()
         } catch {
-            print("Something was wrong")
+            print("Something was wrong with post request for registration")
         }
     }
 
@@ -142,8 +142,8 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
             confirmed = false
             
             DispatchQueue.main.async {
-                let alertController = UIAlertController(title: "Hey!", message: "Entered passwords don't match", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "Confirm password again", style: UIAlertAction.Style.default) {
+                let alertController = UIAlertController(title: "Passwords don't match", message: "The entered passwords are different, so registration is not completed", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
                     UIAlertAction in NSLog("OK")
                 }
                 alertController.addAction(okAction)
@@ -158,8 +158,8 @@ class RegistrationViewController: UIViewController, UIPickerViewDelegate, UIPick
             notEmpty = false
             
             DispatchQueue.main.async {
-                let alertController = UIAlertController(title: "Hey!", message: "Passwords field are empty", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "Enter password again", style: UIAlertAction.Style.default) {
+                let alertController = UIAlertController(title: "Password's field are empty", message: "Password can't consist of an empty string", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Okay", style: UIAlertAction.Style.default) {
                     UIAlertAction in NSLog("OK")
                 }
                 alertController.addAction(okAction)
